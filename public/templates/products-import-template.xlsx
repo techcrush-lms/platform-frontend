@@ -1,0 +1,4 @@
+"type, title,description,price,currency,status,metadata"
+"COURSE,Introduction to Web Development,Learn the basics of web development including HTML CSS and JavaScript,49.99,USD,PUBLISHED,"
+"TICKET,Annual Tech Conference 2024,Join us for our annual tech conference featuring industry experts,199.99,USD,PUBLISHED,"
+"SUBSCRIPTION,Premium Learning Access,Get unlimited access to all courses and premium content,29.99,USD,PUBLISHED,"

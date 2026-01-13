@@ -99,7 +99,7 @@ const VerifySigninForm = ({ email }: VerifySigninFormProps) => {
           disabled={!isFormValid || isSubmitting}
           className={`w-full text-sm sm:text-base py-3 px-4 rounded-lg font-medium text-white transition-all ${
             isFormValid
-              ? 'bg-primary-main hover:bg-primary-800'
+              ? 'bg-primary-main hover:bg-red-800'
               : 'bg-primary-faded cursor-not-allowed'
           }`}
         >

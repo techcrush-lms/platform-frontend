@@ -27,6 +27,7 @@ import { OnboardingSteps } from '@/components/OnboardingSteps';
 import StatsGrid from '@/components/dashboard/StatsGrid';
 import { MonthlyRevenueData, MonthlyRevenueResponse } from '@/types/analytics';
 import usePayments from '@/hooks/page/usePayments';
+import { switchToOrg } from '@/redux/slices/orgSlice';
 
 const Home = () => {
   const router = useRouter();
@@ -47,10 +48,14 @@ const Home = () => {
     router.push('/settings?tab=business-account');
   };
 
+  const handleSelectOrg = (orgId: string) => {
+    dispatch(switchToOrg({ business_id: orgId }));
+  };
+
   useEffect(() => {
     // Show org selection modal if no org is selected
     if (!org && orgs.length > 0) {
-      setShowOrgModal(true);
+      handleSelectOrg(orgs[0].id);
     }
   }, [org, orgs]);
 
@@ -73,34 +78,9 @@ const Home = () => {
     }
     // Show org selection modal if no org is selected
     if (!org && orgs.length > 0) {
-      setShowOrgModal(true);
+      handleSelectOrg(orgs[0].id);
     }
   }, [profile?.role?.role_id, org, orgs, router]);
-
-  // Early returns after all hooks are called
-  if (!org && orgs.length > 0) {
-    return <SelectOrgModal isOpen={true} organizations={orgs} />;
-  }
-
-  // If no orgs exist at all, show a message to create one
-  if (!org && orgs.length === 0) {
-    return router.push('/settings?tab=business-account');
-    // return (
-    //   <div className='section-container flex items-center justify-center min-h-screen'>
-    //     <div className='text-center'>
-    //       <h2 className='text-2xl font-semibold mb-4 dark:text-gray-400'>
-    //         No Business Account found
-    //       </h2>
-    //       <p className='text-gray-600 dark:text-gray-300 mb-6'>
-    //         You need to create a business account before proceeding.
-    //       </p>
-    //       <Button variant='primary' onClick={navigateToBusinessPage}>
-    //         Create a business account
-    //       </Button>
-    //     </div>
-    //   </div>
-    // );
-  }
 
   type ChartDataType = {
     labels: string[];
@@ -119,10 +99,6 @@ const Home = () => {
     // define consistent color palette
     const colorMap = {
       course: '#22d3ee',
-      ticket: '#f472b6',
-      subscription: '#65a30d',
-      digital: '#d97706',
-      physical: '#06b6d4',
     };
 
     // find the matching currency block or use the first available one
@@ -232,82 +208,8 @@ const Home = () => {
       <div className='h-full'>
         {/* Main Content */}
         <div className='flex-1 text-black-1 dark:text-white'>
-          {/* Profile Completion Banner */}
-          {profile?.role?.role_id === SystemRole.BUSINESS_SUPER_ADMIN &&
-            !areAllOnboardingStepsPresent(
-              OnboardingSteps,
-              org?.onboarding_status.onboard_processes!
-            ) && (
-              <>
-                <div className='mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'>
-                  <div className='flex flex-col md:flex-row gap-2 items-center justify-between'>
-                    <div className='flex items-center w-full gap-3'>
-                      <div className='flex-shrink-0'>
-                        {/* Alert Icon */}
-                        <svg
-                          className='h-5 w-5 text-red-400'
-                          viewBox='0 0 20 20'
-                          fill='currentColor'
-                          aria-hidden='true'
-                        >
-                          <path
-                            fillRule='evenodd'
-                            d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z'
-                            clipRule='evenodd'
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <h3 className='text-sm font-medium text-red-800 dark:text-red-200'>
-                          Complete Your Profile
-                        </h3>
-                        <p className='mt-1 text-sm text-red-700 dark:text-red-300'>
-                          Please complete your business profile to access all
-                          features.
-                        </p>
-                      </div>
-                    </div>
-                    <Button
-                      variant='primary'
-                      onClick={() => setShowProfileModal(true)}
-                      className='bg-red-600 hover:bg-red-700 text-white ml-auto'
-                    >
-                      Complete Profile
-                    </Button>
-                  </div>
-                </div>
-              </>
-            )}
-
-          {/* Onboarding Modal */}
-          {profile?.role?.role_id === SystemRole.BUSINESS_SUPER_ADMIN && (
-            <OnboardingModal
-              isOpen={showProfileModal}
-              setIsOpen={setShowProfileModal}
-            />
-          )}
-
           <header className='flex flex-col md:flex-row justify-between md:items-center'>
-            <h2 className='text-2xl font-semibold'>
-              Hello, {profile?.name} 👋🏼
-            </h2>
-            <div className='flex gap-2'>
-              <Button
-                variant='primary'
-                size='icon'
-                className='hover:bg-primary-800'
-                onClick={() => router.push('/campaigns/email/instant')}
-              >
-                <Icon url='/icons/landing/plus.svg' />
-              </Button>
-              <Button
-                variant={'outline'}
-                className='text-lg border-primary-main text-primary-main py-1 dark:text-white hover:bg-primary-800 hover:text-white'
-                onClick={() => router.push('/campaigns/email/scheduled')}
-              >
-                Schedule Message
-              </Button>
-            </div>
+            <h2 className='text-2xl font-semibold'>Hi, {profile?.name}</h2>
           </header>
 
           {/* Stats */}

@@ -47,6 +47,7 @@ export interface InviteContactProps {
   business_id: string;
   email: string;
   name: string;
+  role: string;
 }
 
 export const acceptInviteSchema = Joi.object({

@@ -53,41 +53,11 @@ const Topbar = () => {
               className='rounded-lg block dark:hidden sm:w-[30px] sm:h-[30px]'
             />
           </Link>
-          {/* <Search /> */}
+
           {/* Mobile nav */}
           <MobileNav />
-
-          <div className='hidden sm:block min-w-0 flex-1'>
-            <StoreLink slug={org?.business_slug!} />
-          </div>
         </div>
         <div className='flex items-center lg:order-2 gap-2 sm:gap-2 flex-shrink-0'>
-          {/* Currency Switcher - Show when org is selected */}
-          {org && !isBusiness(profile?.role?.role_id as SystemRole) && (
-            <>
-              {/* Mobile - Compact inline */}
-              <div className='sm:hidden'>
-                <CurrencySwitcher />
-              </div>
-
-              {/* Desktop - Full component */}
-              <div className='hidden sm:block'>
-                <CurrencySwitcher />
-              </div>
-            </>
-          )}
-
-          {/* Mobile Store Link - Icon only */}
-          {org?.business_slug && (
-            <button
-              onClick={handleVisitStore}
-              className='sm:hidden p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors'
-              title='Visit Store'
-            >
-              <Store size={18} />
-            </button>
-          )}
-
           <RecentNotifications />
 
           {/* Cart Icon with Badge */}
@@ -107,9 +77,6 @@ const Topbar = () => {
               )}
             </Link>
           )}
-
-          {/* Apps */}
-          {/* <Apps isOpen={isOpen} setIsOpen={setIsOpen} /> */}
 
           {/* Profile */}
           <Profile />

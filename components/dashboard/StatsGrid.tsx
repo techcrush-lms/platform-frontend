@@ -78,7 +78,7 @@ export default function StatsGrid() {
                 {selectedCurrencyData.net_earnings}
               </p>
               <p className='text-sm text-gray-500 dark:text-gray-400'>
-                Across all products & subscriptions
+                Across all courses
               </p>
             </div>
           </div>
@@ -86,12 +86,12 @@ export default function StatsGrid() {
           {/* Other Cards */}
           {[
             {
-              label: 'Active Subscriptions',
-              value: analytics.stats.active_subscriptions.statistics.active,
+              label: 'Total Enrollments',
+              value: 0,
               icon: <Icon url='/icons/landing/terminal.svg' />,
             },
             {
-              label: 'All Clients',
+              label: 'All Students',
               value: analytics.stats.all_clients.statistics.total,
               icon: <Icon url='/icons/landing/users.svg' />,
             },

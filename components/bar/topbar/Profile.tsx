@@ -107,60 +107,6 @@ const Profile = ({ handleClose }: { handleClose?: () => void }) => {
               </button>
             </li>
           </ul>
-
-          {
-            <div>
-              <div className='pt-3 px-4'>
-                <span className='block text-sm font-semibold text-gray-900 dark:text-white'>
-                  {profile?.role?.role_id === SystemRole.USER
-                    ? 'Switch Business Directory'
-                    : 'Switch Business Account'}
-                </span>
-              </div>
-              <ul className='py-1 text-gray-700 dark:text-gray-300'>
-                {orgs.length > 0 &&
-                  orgs.map((org) => (
-                    <li key={org.id}>
-                      <button
-                        onClick={handleSwitchOrg.bind(this, org.id)}
-                        className='flex items-center gap-2 w-full text-left py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white justify-between'
-                      >
-                        <p className='flex gap-1'>
-                          {/* <img
-                            src={org.logo_url}
-                            alt={`${org.business_name} logo`}
-                            className='w-5 h-5 rounded-full object-contain border dark:border-gray-600 border-graay-400 '
-                          /> */}
-                          <img
-                            src={getAvatar(org.logo_url, org.business_name)}
-                            alt={org.business_name}
-                            className='w-5 h-5 rounded-full object-cover'
-                          />
-                          {org.business_name}{' '}
-                        </p>
-                        {org.id === organization?.id && (
-                          <Icon url='/icons/course/selected.png' width={15} />
-                        )}
-                      </button>
-                    </li>
-                  ))}
-
-                {[SystemRole.BUSINESS_SUPER_ADMIN].includes(
-                  profile?.role?.role_id as SystemRole
-                ) && (
-                  <li>
-                    <Link
-                      href='/settings?tab=business-account'
-                      className='flex items-center gap-2 py-2 px-4 text-sm font-medium text-primary-main hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-primary-faded dark:hover:text-white'
-                    >
-                      <IoIosAdd size={20} />
-                      Create New Business
-                    </Link>
-                  </li>
-                )}
-              </ul>
-            </div>
-          }
         </DropdownMenuContent>
       </DropdownMenu>
 

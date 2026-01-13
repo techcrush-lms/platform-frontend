@@ -31,6 +31,7 @@ const defaultValue: InviteContactProps = {
   email: '',
   name: '',
   business_id: '',
+  role: '',
 };
 
 const Team = () => {
@@ -43,6 +44,9 @@ const Team = () => {
     ...defaultValue,
     business_id: org?.id!,
   });
+
+  const [tab, setTab] = useState('business-administrator');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [members, setMembers] = useState<ContactInvite[]>([]);
@@ -74,6 +78,7 @@ const Team = () => {
       const response = await dispatch(
         inviteMember({
           ...body,
+          role: tab,
         })
       ).unwrap();
 
@@ -133,7 +138,7 @@ const Team = () => {
           }
         />
 
-        <TeamList loading={loading} />
+        <TeamList loading={loading} tab={tab} setTab={setTab} />
 
         {!loading && (
           <Pagination

@@ -53,10 +53,6 @@ const PageHeading = ({
 
   return (
     <>
-      {/* Onboarding Alert */}
-      {org && profile?.role.role_id !== SystemRole.USER && (
-        <OnboardingAlert org={org} />
-      )}
       <div
         className={cn(
           '',
@@ -118,7 +114,7 @@ const PageHeading = ({
                     </svg>
                     <Link
                       href={layer2Link ?? '#'}
-                      className='ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white'
+                      className='ms-1 text-sm font-medium text-gray-700 hover:text-red-600 md:ms-2 dark:text-gray-400 dark:hover:text-white'
                     >
                       {layer4 ? (
                         <>
@@ -155,7 +151,7 @@ const PageHeading = ({
                     {/* <span className='ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400'> */}
                     <Link
                       href={layer3Link ?? '#'}
-                      className='ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white'
+                      className='ms-1 text-sm font-medium text-gray-700 hover:text-red-600 md:ms-2 dark:text-gray-400 dark:hover:text-white'
                     >
                       {layer4 ? (
                         <>
@@ -192,7 +188,7 @@ const PageHeading = ({
                     </svg>
                     <Link
                       href={layer4Link ?? '#'}
-                      className='ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white'
+                      className='ms-1 text-sm font-medium text-gray-700 hover:text-red-600 md:ms-2 dark:text-gray-400 dark:hover:text-white'
                     >
                       {layer4}
                     </Link>

@@ -51,64 +51,59 @@ export const sidebarLinks = [
     roleOptions: [SystemRole.USER],
     activeIconColor: 'text-primary-main', // Add this
   },
+
   {
     icon: IoIosPricetag,
-    route: '/products',
-    label: 'Products',
+    route: '/courses',
+    label: 'Courses',
     group: groups.ONE,
     roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
     activeIconColor: 'text-primary-main', // Add this
     items: [
       {
-        route: '/products/courses',
-        label: 'Courses',
+        route: '/courses/tracks',
+        label: 'Learning Tracks',
       },
       {
-        route: '/products/tickets',
-        label: 'Event Tickets',
-      },
-      {
-        route: '/products/subscriptions',
-        label: 'Subscriptions',
-      },
-      {
-        route: '/products/digital-products',
-        label: 'Digital Products',
-      },
-      {
-        route: '/products/physical-products',
-        label: 'Physical Products',
+        route: '/courses/contents',
+        label: 'Contents',
       },
     ],
   },
   {
     icon: IoIosPricetag,
-    route: '/dashboard/products',
+    route: '/dashboard/courses',
     label: 'Products',
     group: groups.ONE,
     roleOptions: [SystemRole.USER],
     activeIconColor: 'text-primary-main', // Add this
     items: [
       {
-        route: '/dashboard/products/courses',
-        label: 'Courses',
+        route: '/dashboard/courses/tracks',
+        label: 'Learning Tracks',
       },
       {
-        route: '/dashboard/products/tickets',
-        label: 'Event Tickets',
+        route: '/dashboard/courses/contents',
+        label: 'Contents',
+      },
+    ],
+  },
+  {
+    icon: HiCollection,
+    route: '/assessments',
+    label: 'Assessments',
+    group: groups.ONE,
+    roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
+    activeIconColor: 'text-primary-main', // Add this
+    items: [
+      {
+        route: '/assessments/quizzes',
+        label: 'Quizzes',
       },
       {
-        route: '/dashboard/products/subscription-plans',
-        label: 'Subscription Plans',
+        route: '/assessments/exams',
+        label: 'Exams',
       },
-      {
-        route: '/dashboard/products/digital-products',
-        label: 'Digital Products',
-      },
-      // {
-      //   route: '/dashboard/products/physical-products',
-      //   label: 'Physical Products',
-      // },
     ],
   },
   {
@@ -120,14 +115,6 @@ export const sidebarLinks = [
     activeIconColor: 'text-primary-main', // Add this
   },
   {
-    icon: HiUsers,
-    route: '/customers',
-    label: 'Client Management',
-    group: groups.ONE,
-    roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
-    activeIconColor: 'text-primary-main', // Add this
-  },
-  {
     icon: HiUserGroup,
     route: '/team',
     label: 'Team',
@@ -136,42 +123,9 @@ export const sidebarLinks = [
     activeIconColor: 'text-primary-main', // Add this
   },
   {
-    icon: HiBell,
-    route: '/campaigns/email',
-    label: 'Campaigns',
-    group: groups.TWO,
-    roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
-    items: [
-      {
-        route: '/campaigns/email',
-        label: 'Email',
-      },
-      {
-        route: '/campaigns/whatsapp',
-        label: 'Whatsapp',
-      },
-    ],
-  },
-  // {
-  //   icon: HiChartPie,
-  //   route: '/reports',
-  //   label: 'Reports',
-  //   group: groups.ONE,
-  //   roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN],
-  //   activeIconColor: 'text-primary-main', // Add this
-  // },
-  {
-    icon: IoIosWallet,
-    route: '/wallet',
-    label: 'Wallet',
-    group: groups.ONE,
-    roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
-    activeIconColor: 'text-primary-main', // Add this
-  },
-  {
-    icon: IoIosPricetag,
-    route: '/coupons',
-    label: 'Coupons',
+    icon: HiUsers,
+    route: '/students',
+    label: 'Students',
     group: groups.ONE,
     roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
     activeIconColor: 'text-primary-main', // Add this
@@ -185,14 +139,6 @@ export const sidebarLinks = [
     activeIconColor: 'text-primary-main', // Add this
   },
   {
-    icon: IoIosBook,
-    route: '/invoices',
-    label: 'Invoices',
-    group: groups.ONE,
-    roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
-    activeIconColor: 'text-primary-main', // Add this
-  },
-  {
     icon: IoIosAnalytics,
     route: '/dashboard/orders',
     label: 'Orders',
@@ -200,23 +146,6 @@ export const sidebarLinks = [
     roleOptions: [SystemRole.USER],
     activeIconColor: 'text-primary-main', // Add this
   },
-  {
-    icon: IoMdChatboxes,
-    route: '/messages',
-    label: 'Messages',
-    group: groups.ONE,
-    roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
-    activeIconColor: 'text-primary-main', // Add this
-  },
-  {
-    icon: IoMdChatboxes,
-    route: '/dashboard/messages',
-    label: 'Messages',
-    group: groups.ONE,
-    roleOptions: [SystemRole.USER],
-    activeIconColor: 'text-primary-main', // Add this
-  },
-
   {
     icon: IoIosCog,
     route: '/settings',
@@ -233,14 +162,6 @@ export const sidebarLinks = [
     roleOptions: [SystemRole.USER],
     activeIconColor: 'text-primary-main', // Add this
   },
-  // {
-  //   icon: HiOutlineQuestionMarkCircle,
-  //   route: '/help',
-  //   label: 'Help',
-  //   group: groups.TWO,
-  //   roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
-  //   activeIconColor: 'text-primary-main', // Add this
-  // },
 ];
 
 export const dummyUsers = [

@@ -21,6 +21,7 @@ import {
   IoIosBook,
   IoIosBriefcase,
   IoIosCog,
+  IoIosContacts,
   IoIosFilm,
   IoIosHelp,
   IoIosPower,
@@ -51,7 +52,14 @@ export const sidebarLinks = [
     roleOptions: [SystemRole.USER],
     activeIconColor: 'text-primary-main', // Add this
   },
-
+  {
+    icon: HiCollection,
+    route: '/cohorts',
+    label: 'Cohorts',
+    group: groups.ONE,
+    roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
+    activeIconColor: 'text-primary-main', // Add this
+  },
   {
     icon: IoIosPricetag,
     route: '/courses',
@@ -61,33 +69,16 @@ export const sidebarLinks = [
     activeIconColor: 'text-primary-main', // Add this
     items: [
       {
+        route: '/courses/categories',
+        label: 'Categories',
+      },
+      {
         route: '/courses/tracks',
         label: 'Learning Tracks',
       },
-      {
-        route: '/courses/contents',
-        label: 'Contents',
-      },
     ],
   },
-  {
-    icon: IoIosPricetag,
-    route: '/dashboard/courses',
-    label: 'Products',
-    group: groups.ONE,
-    roleOptions: [SystemRole.USER],
-    activeIconColor: 'text-primary-main', // Add this
-    items: [
-      {
-        route: '/dashboard/courses/tracks',
-        label: 'Learning Tracks',
-      },
-      {
-        route: '/dashboard/courses/contents',
-        label: 'Contents',
-      },
-    ],
-  },
+
   {
     icon: HiCollection,
     route: '/assessments',
@@ -134,6 +125,31 @@ export const sidebarLinks = [
     icon: IoIosAnalytics,
     route: '/payments',
     label: 'Payments',
+    group: groups.ONE,
+    roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
+    activeIconColor: 'text-primary-main', // Add this
+  },
+  {
+    icon: HiBell,
+    route: '/notifications/email',
+    label: 'Notifications',
+    group: groups.ONE,
+    roleOptions: [
+      SystemRole.BUSINESS_SUPER_ADMIN,
+      SystemRole.BUSINESS_ADMIN,
+      SystemRole.TUTOR,
+    ],
+    items: [
+      {
+        route: '/notifications/email',
+        label: 'Email',
+      },
+    ],
+  },
+  {
+    icon: IoIosContacts,
+    route: '/logs',
+    label: 'Logs',
     group: groups.ONE,
     roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
     activeIconColor: 'text-primary-main', // Add this

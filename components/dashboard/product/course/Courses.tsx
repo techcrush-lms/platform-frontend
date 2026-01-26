@@ -29,7 +29,7 @@ const CoursesComp = () => {
   } = useCourses();
 
   const draftedCourses = courses.filter(
-    (course) => course.status === ProductStatus.DRAFT
+    (course) => course.status === ProductStatus.DRAFT,
   );
 
   return (
@@ -51,7 +51,7 @@ const CoursesComp = () => {
                   .sort(
                     (a, b) =>
                       new Date(b.created_at).getTime() -
-                      new Date(a.created_at).getTime()
+                      new Date(a.created_at).getTime(),
                   )
                   .slice(0, 3)
                   .map((course, index) => (
@@ -73,7 +73,7 @@ const CoursesComp = () => {
         {/* Search and Filter - exact replication */}
         <div className='mb-2'>
           <Filter
-            pageTitle='All Courses'
+            pageTitle='All Track Contents'
             pageTitleClass='text-xl'
             showPeriod={false}
             enableRightSearchBar={true}
@@ -107,7 +107,9 @@ const CoursesComp = () => {
             <div className='col-span-full flex flex-col items-center justify-center py-16 text-center'>
               <GraduationCapIcon className='w-10 h-10 text-gray-500 dark:text-gray-400 mb-2' />
               <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2'>
-                {searchParams.has('q') ? 'No Courses Found' : 'No Courses Yet'}
+                {searchParams.has('q')
+                  ? 'No Course Contents Found'
+                  : 'No Course Contents Yet'}
               </h3>
               <p className='text-gray-500 dark:text-gray-400 max-w-md'>
                 {searchParams.has('q')

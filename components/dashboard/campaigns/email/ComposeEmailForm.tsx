@@ -13,6 +13,7 @@ import {
   ActionKind,
   notificationTemplates,
   NotificationType,
+  SystemRole,
 } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { Suspense, useEffect, useState } from 'react';
@@ -28,9 +29,6 @@ import { Loader2 } from 'lucide-react';
 import useCustomers from '@/hooks/page/useCustomers';
 import { capitalize } from 'lodash';
 import TinyMceEditor from '@/components/editor/TinyMceEditor';
-
-// Dynamically load the CKEditor component
-const CkEditor = dynamic(() => import('@/components/CkEditor'), { ssr: false });
 
 const ComposeEmailForm = () => {
   const [template, setTemplate] = useState('custom');
@@ -85,7 +83,7 @@ const ComposeEmailFormContent = ({
 
   const { org: organization } = useSelector((state: RootState) => state.org);
 
-  const { customers } = useCustomers();
+  const { customers } = useCustomers({ role: SystemRole.TUTOR });
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -97,7 +95,7 @@ const ComposeEmailFormContent = ({
   const [editorData, setEditorData] = useState('');
 
   const customer = customers.find(
-    (cust) => cust.id === searchParams.get('customerId')
+    (cust) => cust.id === searchParams.get('customerId'),
   );
 
   const customersList = searchParams.has('customerId')
@@ -235,11 +233,13 @@ const ComposeEmailFormContent = ({
                 <MultiSelect
                   options={customersList}
                   onValueChange={setSelectedCustomer}
-                  defaultValue={selectedCustomer}
+                  value={selectedCustomer}
                   placeholder='Select customers'
                   variant='inverted'
                   animation={2}
                   maxCount={3}
+                  showPagination={true}
+                  currentPage={1}
                 />
               </div>
             ) : (
@@ -254,11 +254,13 @@ const ComposeEmailFormContent = ({
                 <MultiSelect
                   options={customersList}
                   onValueChange={setSelectedCustomer}
-                  defaultValue={selectedCustomer}
+                  value={selectedCustomer}
                   placeholder='Select customers'
                   variant='inverted'
                   animation={2}
                   maxCount={3}
+                  showPagination={true}
+                  currentPage={1}
                 />
               </div>
             )}
@@ -284,7 +286,7 @@ const ComposeEmailFormContent = ({
 
             <button
               type='submit'
-              className='text-white bg-primary-main hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-main dark:hover:bg-blue-800 dark:focus:ring-blue-800 flex gap-2'
+              className='text-white bg-primary-main hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-main dark:hover:bg-red-800 dark:focus:ring-red-800 flex gap-2'
             >
               {isLoading ? (
                 <>

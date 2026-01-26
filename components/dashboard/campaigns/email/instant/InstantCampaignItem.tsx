@@ -32,10 +32,10 @@ const InstantNotificationItem = ({
   const sender = notification.owner
     ? `${notification.owner?.name} (${shortenId(notification.owner?.id!)})`
     : notification.business
-    ? `${notification.business?.business_name} (${shortenId(
-        notification.business?.id!
-      )})`
-    : 'N/A';
+      ? `${notification.business?.business_name} (${shortenId(
+          notification.business?.id!,
+        )})`
+      : 'N/A';
 
   const status = notification.status
     ? NOTIFICATION_STATUS.DELIVERED
@@ -55,7 +55,7 @@ const InstantNotificationItem = ({
       >
         <td className='px-6 py-4 max-w-sm whitespace-nowrap overflow-hidden text-ellipsis text-gray-900 dark:text-white font-bold'>
           <button
-            className='hover:text-primary-400 flex items-center gap-1 underline-offset'
+            className='hover:text-red-400 flex items-center gap-1 underline-offset'
             onClick={handleOpenNotification}
             title={notification.id}
           >

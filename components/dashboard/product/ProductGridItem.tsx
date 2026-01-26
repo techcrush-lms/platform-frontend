@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/Icon';
 import {
   formatMoney,
@@ -38,9 +39,7 @@ const ProductGridItem = ({
 }: ProductGridItemProps) => {
   let formattedPrice = '';
 
-  const product_path = getProductPath(type);
-
-  let href = `/products/${product_path}/${id}/edit`;
+  let href = `/courses/tracks/${id}/edit`;
 
   if (data) {
     if (type === ProductType.TICKET) {
@@ -54,7 +53,7 @@ const ProductGridItem = ({
       if (defaultTier) {
         formattedPrice = `<s>${formatMoney(
           +defaultTier.original_amount,
-          defaultTier.currency
+          defaultTier.currency,
         )}+</s> ${formatMoney(+defaultTier.amount, defaultTier.currency)}+`;
       }
     } else if (type === ProductType.COURSE) {
@@ -64,13 +63,13 @@ const ProductGridItem = ({
       const digitalProductData = data as DigitalProduct;
       formattedPrice = formatMoney(
         +digitalProductData.price,
-        digitalProductData.currency
+        digitalProductData.currency,
       );
     } else if (type === ProductType.PHYSICAL_PRODUCT) {
       const physicalProductData = data as PhysicalProduct;
       formattedPrice = formatMoney(
         +physicalProductData.price,
-        physicalProductData.currency
+        physicalProductData.currency,
       );
     }
   }
@@ -90,8 +89,8 @@ const ProductGridItem = ({
                 data?.status === ProductStatus.PUBLISHED
                   ? 'bg-green-600 text-white'
                   : data?.status === ProductStatus.DRAFT
-                  ? 'bg-yellow-500 text-white'
-                  : 'bg-gray-500 text-white'
+                    ? 'bg-yellow-500 text-white'
+                    : 'bg-gray-500 text-white'
               }`}
             >
               {data.status.charAt(0).toUpperCase() + data.status.slice(1)}
@@ -110,10 +109,17 @@ const ProductGridItem = ({
             className='text-gray-600 dark:text-gray-300 text-sm min-h-[20px]'
             dangerouslySetInnerHTML={{ __html: formattedPrice }}
           />
+          <Link
+            href={`/cohorts/${(data as Course).cohort.id}`}
+            className='text-xs space-x-2 dark:bg-black-1 rounded-xl px-2 py-1'
+          >
+            <span>{(data as Course).cohort.cohort_number}</span>
+            <span>({(data as Course).cohort.cohort_month})</span>
+          </Link>
         </div>
         <Link
           href={href}
-          className='flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-primary-main rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 gap-2'
+          className='flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-primary-main rounded-md hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 gap-2'
         >
           <Icon url='/icons/course/edit.svg' width={16} />
           Edit

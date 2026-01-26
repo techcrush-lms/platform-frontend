@@ -21,6 +21,8 @@ import currencyReducer from './slices/currencySlice';
 import physicalProductReducer from './slices/physicalProductSlice';
 import shippingReducer from './slices/shippingSlice';
 import invoiceReducer from './slices/invoiceSlice';
+import cohortReducer from './slices/cohortSlice';
+import logReducer from './slices/logSlice';
 import storage from 'redux-persist/lib/storage'; // Uses localStorage
 import { persistReducer } from 'redux-persist';
 
@@ -55,6 +57,8 @@ const rootReducer = combineReducers({
   physicalProduct: physicalProductReducer,
   shipping: shippingReducer,
   invoice: invoiceReducer,
+  cohort: cohortReducer,
+  log: logReducer,
 });
 
 const loggerMiddleware = (store: any) => (next: any) => (action: any) => {

@@ -41,8 +41,8 @@ const InstantNotificationsList = () => {
           extra={
             <>
               <Link
-                href={`/campaigns/email/compose`}
-                className='text-white bg-primary-main hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-main dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex items-center gap-1'
+                href={`/notifications/email/compose`}
+                className='text-white bg-primary-main hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-main dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800 flex items-center gap-1'
               >
                 {' '}
                 <HiPlus />
@@ -64,19 +64,15 @@ const InstantNotificationsList = () => {
                     >
                       {heading}
                     </th>
-                  )
+                  ),
                 )}
               </tr>
             </thead>
 
             {loading ? (
-
               <LoadingSkeleton length={12} columns={5} />
-
             ) : (
-
               <tbody>
-
                 {notifications.map((notification) => (
                   <InstantNotificationItem notification={notification} />
                 ))}
@@ -85,9 +81,7 @@ const InstantNotificationsList = () => {
                   <TableEndRecord colspan={8} text={noFoundText} />
                 )}
               </tbody>
-
             )}
-
           </table>
         </div>
         {/* Pagination */}
@@ -102,7 +96,6 @@ const InstantNotificationsList = () => {
             noMoreNextPage={notifications.length === 0}
           />
         )}
-
       </section>
     </>
   );

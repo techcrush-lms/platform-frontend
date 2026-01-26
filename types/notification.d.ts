@@ -1,4 +1,4 @@
-import { NotificationType } from '@/lib/utils';
+import { BusinessInviteRole, NotificationType } from '@/lib/utils';
 import { Payment } from './payment';
 
 export interface Business {
@@ -49,8 +49,8 @@ export interface InstantNotification {
   title: string;
   message: string;
   type: NotificationType;
-  read: boolean; 
-  icon_url?: string | null; 
+  read: boolean;
+  icon_url?: string | null;
   status: boolean;
   is_scheduled: boolean;
   business_id: string | null;
@@ -64,7 +64,7 @@ export interface InstantNotification {
     };
   } | null;
   recipients: NotificationRecipientUserDetails[];
-  schedule_info?: any | null; 
+  schedule_info?: any | null;
   owner: {
     id: string;
     name: string;
@@ -89,7 +89,6 @@ export interface InstantNotification {
     };
   } | null; // 👈 make owner nullable
 }
-
 
 export interface ScheduledNotification {
   id: string;
@@ -147,7 +146,7 @@ export interface BusinessContactDetails {
   joined_at: boolean;
   joined_via: string;
   status: boolean;
-  role: boolean;
+  role: BusinessInviteRole;
   created_at: boolean;
   business: {
     id: string;

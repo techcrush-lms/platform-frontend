@@ -13,6 +13,7 @@ import {
   ActionKind,
   notificationTemplates,
   NotificationType,
+  SystemRole,
 } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { Suspense, useEffect, useState } from 'react';
@@ -31,9 +32,7 @@ import Image from 'next/image';
 import { Loader2 } from 'lucide-react';
 import useCustomers from '@/hooks/page/useCustomers';
 import { capitalize } from 'lodash';
-
-// Dynamically load the CKEditor component
-const CkEditor = dynamic(() => import('@/components/CkEditor'), { ssr: false });
+import TinyMceEditor from '@/components/editor/TinyMceEditor';
 
 const ScheduleEmailForm = () => {
   const [template, setTemplate] = useState('custom');
@@ -81,7 +80,7 @@ const ScheduleEmailFormContent = ({
 
   const { org: organization } = useSelector((state: RootState) => state.org);
 
-  const { customers } = useCustomers();
+  const { customers } = useCustomers({ role: SystemRole.TUTOR });
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -93,7 +92,7 @@ const ScheduleEmailFormContent = ({
   const [editorData, setEditorData] = useState('');
 
   const customer = customers.find(
-    (cust) => cust.id === searchParams.get('customerId')
+    (cust) => cust.id === searchParams.get('customerId'),
   );
 
   const customersList = searchParams.has('customerId')
@@ -169,8 +168,8 @@ const ScheduleEmailFormContent = ({
 
   return (
     <>
-      <div className='flex flex-col lg:flex-row gap-2'>
-        <form className='flex-1' onSubmit={handleSubmit}>
+      <div className='flex flex-col lg:flex-row gap-2 lg:items-stretch lg:min-h-screen'>
+        <form className='flex-[2] min-w-0' onSubmit={handleSubmit}>
           <div className='space-y-6 p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700'>
             <h1 className='text-xl font-bold text-gray-900 dark:text-white'>
               Compose email
@@ -255,11 +254,13 @@ const ScheduleEmailFormContent = ({
                 <MultiSelect
                   options={customersList}
                   onValueChange={setSelectedCustomer}
-                  defaultValue={selectedCustomer}
+                  value={selectedCustomer}
                   placeholder='Select customers'
                   variant='inverted'
                   animation={2}
                   maxCount={3}
+                  showPagination={true}
+                  currentPage={1}
                 />
               </div>
             ) : (
@@ -274,11 +275,13 @@ const ScheduleEmailFormContent = ({
                 <MultiSelect
                   options={customersList}
                   onValueChange={setSelectedCustomer}
-                  defaultValue={selectedCustomer}
+                  value={selectedCustomer}
                   placeholder='Select customers'
                   variant='inverted'
                   animation={2}
                   maxCount={3}
+                  showPagination={true}
+                  currentPage={1}
                 />
               </div>
             )}
@@ -294,9 +297,10 @@ const ScheduleEmailFormContent = ({
 
                 {/* Suspense with fallback for CKEditor */}
                 <Suspense fallback={<div>Loading editor...</div>}>
-                  <CkEditor
-                    editorData={editorData}
-                    setEditorData={setEditorData}
+                  <TinyMceEditor
+                    value={editorData}
+                    onChange={setEditorData}
+                    isEmailTemplate={true}
                   />
                 </Suspense>
               </div>
@@ -304,7 +308,7 @@ const ScheduleEmailFormContent = ({
 
             <button
               type='submit'
-              className='text-white bg-primary-main hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-800 dark:hover:bg-primary-main dark:focus:ring-blue-800 flex gap-2'
+              className='text-white bg-primary-main hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-800 dark:hover:bg-primary-main dark:focus:ring-red-800 flex gap-2'
             >
               {isLoading ? (
                 <>
@@ -324,37 +328,7 @@ const ScheduleEmailFormContent = ({
             />
           </div>
         </form>
-        <div className='flex-1 border border-dashed rounded-lg overflow-y-auto'>
-          <div className='space-y-6 p-4 rounded-lg shadow sm:p-6 md:p-8 w-full'>
-            <div className='flex flex-col items-center justify-center pt-8 mx-auto pt:mt-0 '>
-              <a
-                href='#'
-                className='flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 dark:text-white'
-              >
-                <Image
-                  src={'/logo.png'}
-                  width={150}
-                  height={150}
-                  alt='Logo'
-                  className='m-auto block dark:hidden'
-                  priority
-                />
-                <Image
-                  src={'/logo-white.png'}
-                  width={150}
-                  height={150}
-                  alt='Logo'
-                  className='m-auto hidden dark:block'
-                  priority
-                />
-              </a>
-
-              <div className='mt-3 overflow-hidden dark:text-white text-gray-600 max-h-screen lg:h-[68vh] overflow-y-auto w-full'>
-                <div dangerouslySetInnerHTML={{ __html: editorData }} />
-              </div>
-            </div>
-          </div>
-        </div>
+        <div className='flex-1'></div>
       </div>
     </>
   );

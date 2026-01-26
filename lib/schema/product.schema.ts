@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { EventType, ProductStatus, TicketTierStatus } from '../utils';
-import { TicketPurchase } from '@/types/product';
+import { RoleBasic, TicketPurchase } from '@/types/product';
 
 export const CreateCourseSchema = Joi.object({
   title: Joi.string().trim().min(3).max(255).required(),
@@ -30,15 +30,39 @@ export const CreateCourseSchema = Joi.object({
     .guid({ version: ['uuidv4'] })
     .required(),
 
+  cohort_id: Joi.string()
+    .uuid({ version: ['uuidv4'] })
+    .required(),
+
   other_currencies: Joi.array()
     .items(
       Joi.object({
         currency: Joi.string().trim().required(),
         price: Joi.number().min(0).required(),
         original_price: Joi.number().min(0).allow(null).optional(), // ✅ allow null
-      })
+      }),
     )
     .optional(),
+});
+
+export const CreateTrackSchema = Joi.object({
+  name: Joi.string().trim().min(3).max(255).required(),
+
+  description: Joi.string().allow('').optional(),
+
+  multimedia_id: Joi.string()
+    .guid({ version: ['uuidv4'] })
+    .required(),
+});
+
+export const UpdateTrackSchema = Joi.object({
+  name: Joi.string().trim().min(3).max(255).required(),
+
+  description: Joi.string().allow('').optional(),
+
+  multimedia_id: Joi.string()
+    .guid({ version: ['uuidv4'] })
+    .required(),
 });
 
 export interface OtherCurrencyProps {
@@ -57,6 +81,7 @@ export interface CreateCourseProps {
   price: number | null;
   original_price: number | null;
   category_id: string;
+  cohort_id: string;
   other_currencies?: OtherCurrencyProps[];
 }
 
@@ -69,6 +94,7 @@ export const UpdateCourseSchema = Joi.object({
   keywords: Joi.string().allow(null, '').optional(),
   metadata: Joi.object().unknown(true).allow(null).optional(), // if metadata is a JSON object
   category_id: Joi.string().uuid().optional(),
+  cohort_id: Joi.string().uuid().optional(),
   multimedia_id: Joi.string().uuid().optional(),
   status: Joi.string()
     .valid(...Object.values(ProductStatus))
@@ -79,9 +105,19 @@ export const UpdateCourseSchema = Joi.object({
         currency: Joi.string().trim().required(),
         price: Joi.number().min(0).required(),
         original_price: Joi.number().min(0).allow(null).optional(), // ✅ allow null
-      })
+      }),
     )
-    .optional(),
+    .optional()
+    .allow(null),
+  tutors: Joi.array()
+    .items(
+      Joi.object({
+        tutor_id: Joi.string().trim().required(),
+        group_link: Joi.string().trim().required(), // ✅ allow null
+      }),
+    )
+    .optional()
+    .allow(null),
 });
 export interface UpdateCourseProps {
   title?: string;
@@ -92,9 +128,17 @@ export interface UpdateCourseProps {
   keywords?: string;
   metadata?: string;
   category_id?: string;
+  cohort_id?: string;
   multimedia_id?: string;
   status?: string;
+  classroom?: number;
   other_currencies?: OtherCurrencyProps[];
+  tutors?: CourseTutorProps[];
+}
+
+export interface CourseTutorProps {
+  tutor_id?: string;
+  group_link?: string;
 }
 
 export const createModuleContentSchema = Joi.object({
@@ -169,7 +213,7 @@ export const createTicketTierSchema = Joi.object({
         currency: Joi.string().trim().required(),
         price: Joi.number().min(0).required(),
         original_price: Joi.number().min(0).allow(null).optional(), // ✅ allow null
-      })
+      }),
     )
     .optional(),
 });
@@ -249,7 +293,7 @@ export const updateTicketTierSchema = Joi.object({
         currency: Joi.string().trim().required(),
         price: Joi.number().min(0).required(),
         original_price: Joi.number().min(0).allow(null).optional(), // ✅ allow null
-      })
+      }),
     )
     .optional(),
 });
@@ -303,7 +347,7 @@ export const createDigitalProductSchema = Joi.object({
         currency: Joi.string().trim().required(),
         price: Joi.number().min(0).required(),
         original_price: Joi.number().min(0).allow(null).optional(), // ✅ allow null
-      })
+      }),
     )
     .optional(),
 });
@@ -342,7 +386,7 @@ export const updateDigitalProductSchema = Joi.object({
         currency: Joi.string().trim().required(),
         price: Joi.number().min(0).required(),
         original_price: Joi.number().min(0).allow(null).optional(), // ✅ allow null
-      })
+      }),
     )
     .optional(),
 });
@@ -402,7 +446,7 @@ export const createPhysicalProductSchema = Joi.object({
         currency: Joi.string().trim().required(),
         price: Joi.number().min(0).required(),
         original_price: Joi.number().min(0).allow(null).optional(), // ✅ allow null
-      })
+      }),
     )
     .optional(),
   details: Joi.object({
@@ -477,7 +521,7 @@ export const updatePhysicalProductSchema = Joi.object({
         currency: Joi.string().trim().required(),
         price: Joi.number().min(0).required(),
         original_price: Joi.number().min(0).allow(null).optional(), // ✅ allow null
-      })
+      }),
     )
     .optional(),
   details: Joi.object({
@@ -526,4 +570,20 @@ export interface UpdatePhysicalProductProps {
 
 export interface UpdatePhysicalProductMediaProps {
   multimedia_ids: string[];
+}
+
+export interface CreatorBasic {
+  id: string;
+  name: string;
+  role: RoleBasic;
+}
+
+export interface CategoryWithCreator {
+  id: string;
+  name: string;
+  description: string;
+  creator_id: string;
+  created_at: string; // ISO datetime string
+  updated_at: string; // ISO datetime string
+  creator: CreatorBasic;
 }

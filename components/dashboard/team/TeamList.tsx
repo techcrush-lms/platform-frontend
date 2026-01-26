@@ -2,15 +2,24 @@
 
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
 import TableEndRecord from '@/components/ui/TableEndRecord';
-import { cn, ContactInviteStatus, getAvatar } from '@/lib/utils';
-import { RootState } from '@/redux/store';
+import {
+  BusinessInviteRole,
+  BusinessOwnerOrgRole,
+  cn,
+  ContactInviteStatus,
+  getAvatar,
+  getInviteRole,
+} from '@/lib/utils';
+import { AppDispatch, RootState } from '@/redux/store';
 import { capitalize } from 'lodash';
 import { PencilIcon } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import { MdOutlineAdminPanelSettings } from 'react-icons/md';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import App from 'next/app';
+import { fetchInvites } from '@/redux/slices/orgSlice';
 
 const TeamList = ({
   loading,
@@ -18,14 +27,14 @@ const TeamList = ({
   setTab,
 }: {
   loading: boolean;
-  tab: string;
-  setTab: React.Dispatch<React.SetStateAction<string>>;
+  tab: BusinessInviteRole;
+  setTab: React.Dispatch<React.SetStateAction<BusinessInviteRole>>;
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const { invites, count } = useSelector((state: RootState) => state.org);
   const { profile } = useSelector((state: RootState) => state.auth);
-
-  const admins = invites.filter((member) => member.is_owner);
-  const tutors = invites.filter((member) => !member.is_owner);
+  const { org } = useSelector((state: RootState) => state.org);
 
   const renderTableBody = (members: typeof invites, noText: string) => (
     <tbody className='divide-y divide-gray-100 dark:divide-gray-700'>
@@ -37,11 +46,13 @@ const TeamList = ({
           <td className='px-4 py-4 font-medium text-gray-800 dark:text-gray-100'>
             <Link
               href={
-                member.user?.id === profile?.id ? '' : `/teams/${member.id}`
+                member.user?.id === profile?.id
+                  ? ''
+                  : `/team/${member.id}?role=${tab}`
               }
               className={cn(
                 '',
-                member.user?.id === profile?.id && 'cursor-default'
+                member.user?.id === profile?.id && 'cursor-default',
               )}
             >
               {index + 1}
@@ -49,17 +60,21 @@ const TeamList = ({
           </td>
           <td className='px-4 py-3'>
             <Link
-              href={member.user?.id === profile?.id ? '' : `team/${member.id}`}
+              href={
+                member.user?.id === profile?.id
+                  ? ''
+                  : `team/${member.id}?role=${tab}`
+              }
               className={cn(
                 'flex items-center gap-3 pr-3',
-                member.user?.id === profile?.id && 'cursor-default'
+                member.user?.id === profile?.id && 'cursor-default',
               )}
             >
               {(member.user?.profile?.profile_picture! || member.name) && (
                 <img
                   src={getAvatar(
                     member.user?.profile?.profile_picture!,
-                    member.name
+                    member.name,
                   )}
                   alt={member.name}
                   className='w-8 h-8 rounded-full object-cover'
@@ -68,7 +83,7 @@ const TeamList = ({
               <div
                 className={cn(
                   'flex items-center gap-1 underline underline-offset-4 dark:text-gray-200',
-                  member.user?.id === profile?.id && 'no-underline'
+                  member.user?.id === profile?.id && 'no-underline',
                 )}
               >
                 <span className='font-medium text-gray-800 dark:text-gray-100 truncate'>
@@ -93,7 +108,10 @@ const TeamList = ({
                     : 'bg-gray-100 text-gray-700 dark:bg-gray-800/50 dark:text-gray-300'
                 }`}
               >
-                {member.is_owner ? 'Admin' : 'Tutor'}
+                {getInviteRole({
+                  businessInviteRole: member.role as BusinessInviteRole,
+                  superAdmin: member.is_owner,
+                })}
               </span>
             </span>
           </td>
@@ -115,20 +133,25 @@ const TeamList = ({
     </tbody>
   );
 
+  const loadByRole = (role: BusinessInviteRole) => {
+    setTab(role);
+    dispatch(fetchInvites({ business_id: org?.id, role, page: 1 }));
+  };
+
   return (
     <Tabs defaultValue='business-administrator'>
       <TabsList className='grid grid-cols-2'>
         <TabsTrigger
           value='business-administrator'
           className='data-[state=active]:bg-primary-main data-[state=active]:text-white'
-          onClick={() => setTab('business-administrator')}
+          onClick={() => loadByRole(BusinessInviteRole.BUSINESS_ADMIN)}
         >
           Admins
         </TabsTrigger>
         <TabsTrigger
           value='tutor'
           className='data-[state=active]:bg-primary-main data-[state=active]:text-white'
-          onClick={() => setTab('tutor')}
+          onClick={() => loadByRole(BusinessInviteRole.TUTOR)}
         >
           Tutors
         </TabsTrigger>
@@ -149,7 +172,7 @@ const TeamList = ({
             {loading ? (
               <LoadingSkeleton length={12} columns={5} />
             ) : (
-              renderTableBody(admins, 'No admins found.')
+              renderTableBody(invites, 'No admins found.')
             )}
           </table>
         </section>
@@ -170,7 +193,7 @@ const TeamList = ({
             {loading ? (
               <LoadingSkeleton length={12} columns={5} />
             ) : (
-              renderTableBody(tutors, 'No tutors found.')
+              renderTableBody(invites, 'No tutors found.')
             )}
           </table>
         </section>

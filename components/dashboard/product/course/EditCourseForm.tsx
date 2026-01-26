@@ -27,6 +27,7 @@ import { updateCourse } from '@/redux/slices/courseSlice';
 import { Globe } from 'lucide-react';
 import { updateOnboardingProcess } from '@/redux/slices/orgSlice';
 import useCurrencies from '@/hooks/page/useCurrencies';
+import useCohorts from '@/hooks/page/useCohorts';
 
 const defaultValue = {
   title: '',
@@ -36,6 +37,7 @@ const defaultValue = {
   price: 0,
   original_price: 0,
   category_id: '',
+  cohort_id: '',
   other_currencies: [],
 };
 
@@ -46,6 +48,7 @@ const EditCourseForm = () => {
   const router = useRouter();
 
   const { categories } = useProductCategory();
+  const { cohorts } = useCohorts();
   const { foreignCurrencies } = useCurrencies();
   const { org } = useSelector((state: RootState) => state.org);
   const { course } = useSelector((state: RootState) => state.course);
@@ -60,7 +63,7 @@ const EditCourseForm = () => {
 
   // Handle input changes (supports nested other_currencies)
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
 
@@ -93,8 +96,8 @@ const EditCourseForm = () => {
                   ? +value
                   : undefined
                 : value
-                ? +value
-                : 0,
+                  ? +value
+                  : 0,
           };
 
           return { ...prev, other_currencies: updated };
@@ -135,7 +138,7 @@ const EditCourseForm = () => {
       reader.readAsDataURL(file);
 
       const response: any = await dispatch(
-        uploadImage({ form_data: formData, business_id: org?.id })
+        uploadImage({ form_data: formData, business_id: org?.id }),
       );
 
       if (response.type === 'multimedia-upload/image/rejected') {
@@ -172,6 +175,7 @@ const EditCourseForm = () => {
 
     try {
       setIsSubmitting(true);
+
       const { error, value } = UpdateCourseSchema.validate(body);
       if (error) throw new Error(error.details[0].message);
 
@@ -185,25 +189,25 @@ const EditCourseForm = () => {
             original_price: +body.original_price!,
           },
           business_id: org?.id!,
-        })
+        }),
       ).unwrap();
 
       // Update onboarding process
       if (
         !org?.onboarding_status.onboard_processes?.includes(
-          OnboardingProcess.PRODUCT_CREATION
+          OnboardingProcess.PRODUCT_CREATION,
         )
       ) {
         await dispatch(
           updateOnboardingProcess({
             business_id: org?.id!,
             process: OnboardingProcess.PRODUCT_CREATION,
-          })
+          }),
         );
       }
 
-      toast.success('Course updated successfully!');
-      router.push(`/products/courses/${course?.id}/contents`);
+      toast.success('Learning track updated successfully!');
+      router.push(`/courses/tracks/${course?.id}/tutors`);
     } catch (error: any) {
       console.error('Submission failed:', error);
       toast.error(error.message);
@@ -240,6 +244,7 @@ const EditCourseForm = () => {
     body.slug &&
     body.description &&
     body.category_id &&
+    body.cohort_id &&
     body.price &&
     body.multimedia_id;
 
@@ -254,6 +259,7 @@ const EditCourseForm = () => {
         original_price: +course.original_price,
         multimedia_id: course.multimedia?.id,
         category_id: course.category.id,
+        cohort_id: course?.cohort?.id,
         other_currencies: course.other_currencies,
       });
       setShowCrossedOutPrice(Boolean(+course.original_price));
@@ -333,7 +339,7 @@ const EditCourseForm = () => {
                     <SelectItem key={index} value={category.id}>
                       {category.name}
                     </SelectItem>
-                  )
+                  ),
                 )}
               </SelectContent>
             </Select>
@@ -364,6 +370,33 @@ const EditCourseForm = () => {
                 </span>
               </p>
             )}
+          </div>
+        </div>
+
+        {/* Cohort */}
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+          <div>
+            <label className='text-sm font-medium mb-1 block'>
+              Cohort <span className='text-red-500'>*</span>
+            </label>
+            <Select
+              value={body.cohort_id}
+              onValueChange={(value) =>
+                setBody((prev) => ({ ...prev, cohort_id: value }))
+              }
+              required
+            >
+              <SelectTrigger id='cohort' className='w-full'>
+                <SelectValue placeholder='Select your cohort' />
+              </SelectTrigger>
+              <SelectContent>
+                {cohorts.map((cohort: { id: string; name: string }, index) => (
+                  <SelectItem key={index} value={cohort.id}>
+                    {cohort.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -456,7 +489,7 @@ const EditCourseForm = () => {
           <Textarea
             rows={3}
             name='description'
-            placeholder='Enter Course Description'
+            placeholder='Enter Track Description'
             className='w-full rounded-md px-4 py-3'
             value={body.description}
             onChange={(e) =>
@@ -474,8 +507,8 @@ const EditCourseForm = () => {
             className={cn(
               'text-white px-8 py-3 rounded-md font-medium',
               isFormValid
-                ? 'bg-primary-main hover:bg-blue-700'
-                : 'bg-primary-faded cursor-not-allowed'
+                ? 'bg-primary-main hover:bg-red-700'
+                : 'bg-primary-faded cursor-not-allowed',
             )}
           >
             {isSubmitting ? (

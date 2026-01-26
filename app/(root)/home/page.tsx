@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import Icon from '@/components/ui/Icon';
 import {
   areAllOnboardingStepsPresent,
+  getInviteRole,
   PurchaseItemType,
   SystemRole,
 } from '@/lib/utils';
@@ -94,7 +95,7 @@ const Home = () => {
 
   const generateChartData = (
     analytics?: MonthlyRevenueData,
-    selectedCurrency?: string
+    selectedCurrency?: string,
   ): ChartDataType => {
     // define consistent color palette
     const colorMap = {
@@ -129,11 +130,11 @@ const Home = () => {
       (key) => ({
         label: key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' '), // e.g. "Digital"
         data: currencyData.months.map((m: any) =>
-          Number((m[key] as any)?.amount || 0)
+          Number((m[key] as any)?.amount || 0),
         ),
         borderColor: colorMap[key],
         backgroundColor: colorMap[key],
-      })
+      }),
     );
 
     return { labels, datasets };
@@ -142,7 +143,7 @@ const Home = () => {
   // ✅ usage
   const chartData = generateChartData(
     analytics?.monthlyRevenue!,
-    selectedCurrency
+    selectedCurrency,
   );
 
   const recentActivities = [
@@ -209,7 +210,14 @@ const Home = () => {
         {/* Main Content */}
         <div className='flex-1 text-black-1 dark:text-white'>
           <header className='flex flex-col md:flex-row justify-between md:items-center'>
-            <h2 className='text-2xl font-semibold'>Hi, {profile?.name}</h2>
+            <h2 className='text-xl font-semibold'>
+              Hi,{' '}
+              {getInviteRole({
+                businessInviteRole: profile?.business_contacts?.[0].role!,
+                superAdmin: profile?.business_contacts?.[0].is_owner!,
+              })}{' '}
+              {profile?.name}
+            </h2>
           </header>
 
           {/* Stats */}

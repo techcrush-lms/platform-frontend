@@ -12,6 +12,7 @@ import { SystemRole } from '@/lib/utils';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { BsPatchCheck } from 'react-icons/bs';
 import { Bus, Coins, MapPin } from 'lucide-react';
+import CurrenciesSettings from '@/components/settings/CurrenciesSettings';
 
 const Settings = () => {
   const { profile } = useSelector((state: RootState) => state.auth);
@@ -54,6 +55,16 @@ const Settings = () => {
                   <FiShield className='w-4 h-4' />
                   &nbsp; Security
                 </TabsTrigger>
+
+                {profile?.role.role_id === SystemRole.BUSINESS_SUPER_ADMIN && (
+                  <TabsTrigger
+                    value='currencies'
+                    className='w-full justify-start px-4 py-3 data-[state=active]:bg-primary-main text-black-1 dark:text-white data-[state=active]:text-white'
+                  >
+                    <Coins className='w-4 h-4' />
+                    &nbsp; Currencies
+                  </TabsTrigger>
+                )}
               </TabsList>
             </div>
 
@@ -66,6 +77,12 @@ const Settings = () => {
               <TabsContent value='security'>
                 <SecuritySettings />
               </TabsContent>
+
+              {profile?.role.role_id === SystemRole.BUSINESS_SUPER_ADMIN && (
+                <TabsContent value='currencies'>
+                  <CurrenciesSettings />
+                </TabsContent>
+              )}
             </div>
           </div>
         </Tabs>

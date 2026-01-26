@@ -1,5 +1,7 @@
 // src/components/multi-select.tsx
 
+import { useState, useEffect } from 'react';
+
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import {
@@ -28,6 +30,7 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -50,14 +53,15 @@ const multiSelectVariants = cva(
     defaultVariants: {
       variant: 'default',
     },
-  }
+  },
 );
 
 /**
  * Props for MultiSelect component
  */
 interface MultiSelectProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof multiSelectVariants> {
   /**
    * An array of option objects to be displayed in the multi-select component.
@@ -117,6 +121,12 @@ interface MultiSelectProps
    * Optional, can be used to add custom styles.
    */
   className?: string;
+
+  /** Current page number for form pagination */
+  currentPage?: number;
+
+  /** Whether pagination controls should be shown */
+  showPagination?: boolean;
 }
 
 export const MultiSelect = React.forwardRef<
@@ -135,17 +145,26 @@ export const MultiSelect = React.forwardRef<
       modalPopover = false,
       asChild = false,
       className,
+      value,
+      currentPage,
       ...props
     },
-    ref
+    ref,
   ) => {
-    const [selectedValues, setSelectedValues] =
-      React.useState<string[]>(defaultValue);
-    const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
-    const [isAnimating, setIsAnimating] = React.useState(false);
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    const page = Number(searchParams.get('page') ?? 1);
+
+    const [selectedValues, setSelectedValues] = useState<string[]>(
+      value! as string[],
+    );
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
 
     const handleInputKeyDown = (
-      event: React.KeyboardEvent<HTMLInputElement>
+      event: React.KeyboardEvent<HTMLInputElement>,
     ) => {
       if (event.key === 'Enter') {
         setIsPopoverOpen(true);
@@ -190,6 +209,19 @@ export const MultiSelect = React.forwardRef<
       }
     };
 
+    const updatePage = (newPage: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', String(newPage));
+
+      router.push(`${pathname}?${params.toString()}`);
+    };
+
+    useEffect(() => {
+      if (value) {
+        setSelectedValues(value as string[]);
+      }
+    }, [value]);
+
     return (
       <Popover
         open={isPopoverOpen}
@@ -204,7 +236,7 @@ export const MultiSelect = React.forwardRef<
             variant={'outline'}
             className={cn(
               'w-full min-h-10 h-auto items-center justify-between [&_svg]:pointer-events-auto bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500',
-              className
+              className,
             )}
           >
             {selectedValues.length > 0 ? (
@@ -218,7 +250,7 @@ export const MultiSelect = React.forwardRef<
                         key={value}
                         className={cn(
                           isAnimating ? 'animate-bounce' : '',
-                          multiSelectVariants({ variant })
+                          multiSelectVariants({ variant }),
                         )}
                         style={{ animationDuration: `${animation}s` }}
                       >
@@ -241,7 +273,7 @@ export const MultiSelect = React.forwardRef<
                       className={cn(
                         'bg-transparent text-foreground border-foreground/1 hover:bg-transparent',
                         isAnimating ? 'animate-bounce' : '',
-                        multiSelectVariants({ variant })
+                        multiSelectVariants({ variant }),
                       )}
                       style={{ animationDuration: `${animation}s` }}
                     >
@@ -305,7 +337,7 @@ export const MultiSelect = React.forwardRef<
                       'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
                       selectedValues.length === options.length
                         ? 'bg-primary text-primary-foreground'
-                        : 'opacity-50 [&_svg]:invisible'
+                        : 'opacity-50 [&_svg]:invisible',
                     )}
                   >
                     <CheckIcon className='h-4 w-4' />
@@ -325,7 +357,7 @@ export const MultiSelect = React.forwardRef<
                           'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
                           isSelected
                             ? 'bg-primary text-primary-foreground'
-                            : 'opacity-50 [&_svg]:invisible'
+                            : 'opacity-50 [&_svg]:invisible',
                         )}
                       >
                         <CheckIcon className='h-4 w-4' />
@@ -365,10 +397,34 @@ export const MultiSelect = React.forwardRef<
               </CommandGroup>
             </CommandList>
           </Command>
+          {props.showPagination && (
+            <div className='flex items-center justify-between gap-2 p-3 border-t'>
+              <Button
+                type='button'
+                variant='outline'
+                size='sm'
+                disabled={page <= 1}
+                onClick={() => updatePage(page - 1)}
+              >
+                Previous
+              </Button>
+
+              <span className='text-sm text-muted-foreground'>Page {page}</span>
+
+              <Button
+                type='button'
+                variant='primary'
+                size='sm'
+                onClick={() => updatePage(page + 1)}
+              >
+                Next
+              </Button>
+            </div>
+          )}
         </PopoverContent>
       </Popover>
     );
-  }
+  },
 );
 
 MultiSelect.displayName = 'MultiSelect';

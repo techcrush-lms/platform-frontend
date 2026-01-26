@@ -4,7 +4,6 @@ import { truncate } from '@/lib/utils';
 import { Course } from '@/types/product';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Interface } from 'readline/promises';
 
 interface CourseCardProps {
   title: string;
@@ -26,7 +25,7 @@ const CourseCard = ({
     <ThemeDivBorder className='flex-1 border border-[#E5E5E7] rounded-xl overflow-hidden flex h-full'>
       {/* Image container - fills left space */}
       <div className='relative w-1/3 min-w-[120px]'>
-        <Link href={`/products/courses/${data?.id}/edit`}>
+        <Link href={`/courses/tracks/${data?.id}/edit`}>
           <Image
             src={imageSrc}
             alt={title}
@@ -41,7 +40,7 @@ const CourseCard = ({
       <div className='flex-1 p-4 flex flex-col justify-between'>
         <div>
           <Link
-            href={`/products/courses/${data?.id}/edit`}
+            href={`/courses/contents/${data?.id}/edit`}
             className='font-medium text-base leading-6 hover:text-primary-300 mb-1'
             title={title}
           >

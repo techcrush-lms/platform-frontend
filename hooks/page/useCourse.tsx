@@ -4,7 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCourse } from '@/redux/slices/courseSlice';
 import { useParams } from 'next/navigation';
 
-const useCourse = () => {
+interface UseCourseProps {
+  id?: string;
+}
+
+const useCourse = ({ id }: UseCourseProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const params = useParams();
 
@@ -13,7 +17,7 @@ const useCourse = () => {
 
   useEffect(() => {
     dispatch(
-      fetchCourse({ id: params.id as string, business_id: org?.id })
+      fetchCourse({ id: id || (params.id as string), business_id: org?.id }),
     ).unwrap();
   }, [dispatch, org]);
 

@@ -7,7 +7,7 @@ import { MdOutlineAdminPanelSettings } from 'react-icons/md';
 import { FaEnvelope, FaCalendarAlt } from 'react-icons/fa';
 import Avatar from '@/components/ui/Avatar';
 import DeactivateIcon from '@/components/ui/icons/DeactivateIcon';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/redux/store';
 import {
@@ -17,7 +17,13 @@ import {
   restoreMember,
   viewInvite,
 } from '@/redux/slices/orgSlice';
-import { ContactInviteStatus, getAvatar } from '@/lib/utils';
+import {
+  BusinessInviteRole,
+  ContactInviteStatus,
+  formatMoney,
+  getAvatar,
+  ProductStatus,
+} from '@/lib/utils';
 import { capitalize } from 'lodash';
 import toast from 'react-hot-toast';
 import LoadingIcon from '@/components/ui/icons/LoadingIcon';
@@ -27,14 +33,18 @@ import useInvites from '@/hooks/page/useInvites';
 import { IoIosChatboxes } from 'react-icons/io';
 import Chat from '@/components/dashboard/chat/Chat';
 import { XIcon } from 'lucide-react';
+import Link from 'next/link';
+import { AssignCourseModal } from '@/components/dashboard/product/course/AssignCourseModal';
+import TeamMemberAssignedCourseDetails from '@/components/dashboard/team/TeamMemberAssignedCourseDetails';
+import useInviteById from '@/hooks/page/useInviteById';
 
 const TeamMember = () => {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { invite } = useSelector((state: RootState) => state.org);
-  const { invites, count, loading, onClickNext, onClickPrev } = useInvites();
+  const { invite } = useInviteById();
 
   const [chatOpen, setChatOpen] = useState(false);
 
@@ -68,7 +78,7 @@ const TeamMember = () => {
 
       // Submit logic here
       const response: any = await dispatch(
-        reinviteMember({ invite_id: params?.id as string })
+        reinviteMember({ invite_id: params?.id as string }),
       );
 
       if (response.type === 'contact/reinvite-member/:invite_id/rejected') {
@@ -90,7 +100,7 @@ const TeamMember = () => {
 
       // Submit logic here
       const response: any = await dispatch(
-        removeMember({ invite_id: params?.id as string })
+        removeMember({ invite_id: params?.id as string }),
       );
 
       if (response.type === 'contact/remove-member/:invite_id/rejected') {
@@ -113,7 +123,7 @@ const TeamMember = () => {
 
       // Submit logic here
       const response: any = await dispatch(
-        deactivateMember({ invite_id: params?.id as string })
+        deactivateMember({ invite_id: params?.id as string }),
       );
 
       if (response.type === 'contact/deactivate-member/:invite_id/rejected') {
@@ -135,7 +145,7 @@ const TeamMember = () => {
 
       // Submit logic here
       const response: any = await dispatch(
-        restoreMember({ invite_id: params?.id as string })
+        restoreMember({ invite_id: params?.id as string }),
       );
 
       if (response.type === 'contact/restore-member/:invite_id/rejected') {
@@ -150,12 +160,6 @@ const TeamMember = () => {
       setIsSubmittingRestoreMember(false);
     }
   };
-
-  useEffect(() => {
-    if (invites) {
-      dispatch(viewInvite(params?.id as string));
-    }
-  }, [dispatch, invites]);
 
   useEffect(() => {
     if (allowRemoveMemberAction) {
@@ -191,6 +195,8 @@ const TeamMember = () => {
     isSubmittingDeactivateMember ||
     isSubmittingRestoreMember;
 
+  const courses_tutoring = invite?.user?.courses_tutoring;
+
   return (
     <main className='min-h-screen bg-gray-50 dark:bg-gray-900 pb-12'>
       <div className='section-container space-y-6'>
@@ -205,16 +211,6 @@ const TeamMember = () => {
           enableBackButton
           ctaButtons={
             <div className='flex gap-2'>
-              {invite?.user && invite.status === ContactInviteStatus.ACTIVE && (
-                <Button
-                  variant='primary'
-                  className='text-md bg-primary gap-1 py-2 rounded-lg flex items-center px-3'
-                  onClick={() => setChatOpen(!chatOpen)}
-                >
-                  <IoIosChatboxes className='text-lg' />
-                  {chatOpen ? 'Close Chat' : 'Chat'}
-                </Button>
-              )}
               {invite?.status === ContactInviteStatus.PENDING ||
               invite?.status === ContactInviteStatus.EXPIRED ? (
                 <Button
@@ -291,7 +287,7 @@ const TeamMember = () => {
               <img
                 src={getAvatar(
                   invite?.user?.profile?.profile_picture!,
-                  invite?.name!
+                  invite?.name!,
                 )}
                 alt={invite?.name}
                 className='w-[100px] h-[100px] rounded-full object-cover'
@@ -357,11 +353,12 @@ const TeamMember = () => {
             >
               Edit Details
             </Button> */}
+
             <Button
               type='button'
               variant='red'
               onClick={() => setRemoveMemberOpenModal(true)}
-              disabled={isSubmitting}
+              disabled={isSubmitting || Boolean(courses_tutoring?.length)}
             >
               {isSubmittingRemoveMember ? (
                 <span className='flex items-center justify-center'>
@@ -374,6 +371,29 @@ const TeamMember = () => {
             </Button>
           </div>
         </div>
+
+        {/* Course Tutoring Card */}
+        {invite?.role === BusinessInviteRole.TUTOR && (
+          <div className='w-full mx-auto bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6'>
+            <h3 className='text-lg font-semibold text-gray-800 dark:text-gray-100'>
+              Assigned Courses
+            </h3>
+
+            {courses_tutoring?.length ? (
+              <div className='space-y-4'>
+                {courses_tutoring.map((course_tutoring) => (
+                  <TeamMemberAssignedCourseDetails
+                    course_tutoring={course_tutoring}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className='text-sm text-gray-500 dark:text-gray-400'>
+                This tutor is not assigned to any courses yet.
+              </div>
+            )}
+          </div>
+        )}
 
         <ActionConfirmationModal
           body={`Are you sure you want to remove your team member - ${invite?.name}`}
@@ -406,23 +426,6 @@ const TeamMember = () => {
           allowAction={allowResendInviteAction}
           setAllowAction={setAllowResendInviteAction}
         />
-
-        {invite?.user && chatOpen && (
-          <div className='fixed bottom-4 right-4 w-80 max-w-[95vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col overflow-hidden z-10'>
-            <>
-              <Chat
-                chatbuddyId={invite.user?.id!}
-                height='h-[50vh] max-h-[40vh] md:max-h-[30vh] lg:max-h-[38vh]'
-                enabledBackButton={false}
-                rightSideComponent={
-                  <button onClick={() => setChatOpen(false)}>
-                    <XIcon />
-                  </button>
-                }
-              />
-            </>
-          </div>
-        )}
       </div>
     </main>
   );

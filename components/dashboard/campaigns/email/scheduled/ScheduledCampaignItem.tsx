@@ -28,10 +28,10 @@ const ScheduledNotificationItem = ({
   const sender = notification.owner
     ? `${notification.owner?.name} (${shortenId(notification.owner?.id!)})`
     : notification.business
-    ? `${notification.business?.business_name} (${shortenId(
-        notification.business?.id!
-      )})`
-    : 'N/A';
+      ? `${notification.business?.business_name} (${shortenId(
+          notification.business?.id!,
+        )})`
+      : 'N/A';
 
   const status = notification.schedule_info?.status;
 
@@ -49,7 +49,7 @@ const ScheduledNotificationItem = ({
       >
         <td className='px-6 py-4 max-w-sm whitespace-nowrap overflow-hidden text-ellipsis text-gray-900 dark:text-white font-bold'>
           <button
-            className='hover:text-primary-400 flex items-center gap-1 underline-offset'
+            className='hover:text-red-400 flex items-center gap-1 underline-offset'
             onClick={handleOpenNotification}
             title={notification.id}
           >
@@ -62,7 +62,7 @@ const ScheduledNotificationItem = ({
         </td>
         <td className='px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white font-bold'>
           {moment(notification.schedule_info?.scheduled_time).format(
-            'MMMM D, YYYY HH:MM'
+            'MMMM D, YYYY HH:mm A',
           )}
         </td>
         <td className='px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white font-bold'>

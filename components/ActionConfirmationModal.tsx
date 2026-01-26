@@ -37,6 +37,7 @@ const ActionConfirmationModal = ({
         size='md'
         onClose={() => setOpenModal(false)}
         popup
+        position='center'
       >
         <Modal.Header />
         <Modal.Body>

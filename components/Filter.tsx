@@ -33,12 +33,12 @@ const Filter = ({
   searchPlaceholder?: string;
   showPeriod?: boolean;
   showFilterByDate?: boolean;
-  showRefresh?: boolean
+  showRefresh?: boolean;
   handleSearchSubmit?: (input: string) => void;
   handleFilterByDateSubmit?: (
     startDate: string,
     endDate: string,
-    setOpenModal: (value: React.SetStateAction<boolean>) => void
+    setOpenModal: (value: React.SetStateAction<boolean>) => void,
   ) => void;
   handleRefresh?: () => void;
 }) => {
@@ -81,7 +81,7 @@ const Filter = ({
               onSubmit={handleSearchFormSubmit}
               className={cn(
                 'w-full',
-                !showFullSearchWidth && 'lg:w-[50%] xl:w-[35%]'
+                !showFullSearchWidth && 'lg:w-[50%] xl:w-[35%]',
               )}
             >
               <Input
@@ -90,7 +90,7 @@ const Filter = ({
                 placeholder={searchPlaceholder}
                 value={searchQuery}
                 onChange={(e: any) => setSearchQuery(e.target.value)}
-                className='w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                className='w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500'
               />
             </form>
           ) : (
@@ -98,7 +98,7 @@ const Filter = ({
               className={cn(
                 'text-2xl font-bold',
                 pageTitleClass && pageTitleClass,
-                enableRightSearchBar && 'hidden md:block'
+                enableRightSearchBar && 'hidden md:block',
               )}
             >
               {pageTitle!}
@@ -108,7 +108,7 @@ const Filter = ({
         <div
           className={cn(
             `flex items-center flex-row-reverse lg:flex-row gap-2`,
-            enableRightSearchBar && 'flex-row'
+            enableRightSearchBar && 'flex-row',
           )}
         >
           {enableRightSearchBar && (
@@ -116,7 +116,7 @@ const Filter = ({
               onSubmit={handleSearchFormSubmit}
               className={cn(
                 'w-full',
-                !showFullSearchWidth && 'lg:w-[50%] xl:w-[35%]'
+                !showFullSearchWidth && 'lg:w-[50%] xl:w-[35%]',
               )}
             >
               <Input
@@ -125,7 +125,7 @@ const Filter = ({
                 placeholder={searchPlaceholder}
                 value={searchQuery}
                 onChange={(e: any) => setSearchQuery(e.target.value)}
-                className='w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
+                className='w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500'
               />
             </form>
           )}
@@ -141,23 +141,23 @@ const Filter = ({
             </Button>
           )}
 
-          { showRefresh && (
-          <Button
-            title='Refresh'
-            size='icon'
-            variant='primary'
-            className='text-white bg-primary-main hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2 dark:bg-primary-main dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex gap-1 items-center'
-            onClick={handleRefreshClick}>
-            <HiRefresh size={20} className={'text-2xl'} />
-          </Button>
-          ) }
-
+          {showRefresh && (
+            <Button
+              title='Refresh'
+              size='icon'
+              variant='primary'
+              className='text-white bg-primary-main hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-2 dark:bg-primary-main dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800 flex gap-1 items-center'
+              onClick={handleRefreshClick}
+            >
+              <HiRefresh size={20} className={'text-2xl'} />
+            </Button>
+          )}
 
           {showPeriod && (
             <form className='w-full'>
               <select
                 id='period'
-                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 flex p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full'
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 flex p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500 w-full'
                 defaultValue='today'
               >
                 {filterPeriods.map((period) => (
@@ -217,7 +217,7 @@ const Filter = ({
           <Modal.Footer className='flex justify-end'>
             <button
               type='submit'
-              className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex gap-1 items-center'
+              className='text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800 flex gap-1 items-center'
             >
               <IoIosFunnel />
               Filter

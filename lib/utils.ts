@@ -137,10 +137,16 @@ export enum SystemRole {
   USER = 'user',
   BUSINESS_SUPER_ADMIN = 'business-super-administrator',
   BUSINESS_ADMIN = 'business-administrator',
+  TUTOR = 'tutor',
 }
 
 export enum BusinessOwnerOrgRole {
   USER = 'user',
+  BUSINESS_ADMIN = 'business-administrator',
+}
+
+export enum BusinessInviteRole {
+  TUTOR = 'tutor',
   BUSINESS_ADMIN = 'business-administrator',
 }
 
@@ -219,7 +225,7 @@ export const emailSplit = (email: string) => {
 export const getColor = (status: string) => {
   const details = badgeColors?.find(
     (badge: { color: string; for: Array<string> }) =>
-      badge.for.includes(status?.toLowerCase())
+      badge.for.includes(status?.toLowerCase()),
   );
 
   return details?.color;
@@ -231,7 +237,7 @@ export const replaceAsterisk = (network: string) => {
 
 export const formatMoney = (
   amount: number,
-  currency: string = 'NGN'
+  currency: string = 'NGN',
 ): string => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -280,7 +286,7 @@ export const decryptInput = (encryptedInput: string): string => {
     const decipher = crypto.createDecipheriv(
       algorithm,
       secretKey,
-      Buffer.from(ivHex, 'hex')
+      Buffer.from(ivHex, 'hex'),
     );
     let decrypted = decipher.update(encrypted, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
@@ -291,7 +297,7 @@ export const decryptInput = (encryptedInput: string): string => {
 };
 
 export const getLeastTicketTierPrice = (
-  ticketTiers: TicketTier[]
+  ticketTiers: TicketTier[],
 ): number | 0 => {
   if (!ticketTiers.length) return 0;
 
@@ -338,7 +344,7 @@ export const getAvatar = (picture: string, name: string) => {
   return picture
     ? picture
     : `https://ui-avatars.com/api/?name=${encodeURIComponent(
-        name
+        name,
       )}&background=random&size=32`;
 };
 
@@ -501,19 +507,19 @@ export const getFirstAvailableTier = (product: Product): TicketTier | null => {
 };
 
 export const sortSubPlansByPrice = (
-  plan_prices: SubscriptionPlanPrice[]
+  plan_prices: SubscriptionPlanPrice[],
 ): SubscriptionPlanPrice[] =>
   [...plan_prices].sort((a, b) => +a.price - +b.price);
 
 export const getFirstAvailablePlan = (
-  product: Product
+  product: Product,
 ): SubscriptionPlanPrice | null => {
   if (
     product?.type === ProductType.SUBSCRIPTION &&
     product?.subscription_plan?.subscription_plan_prices?.length
   ) {
     return sortSubPlansByPrice(
-      product.subscription_plan.subscription_plan_prices
+      product.subscription_plan.subscription_plan_prices,
     )[0];
   }
   return null;
@@ -521,15 +527,15 @@ export const getFirstAvailablePlan = (
 
 export const productItemInCart = (
   cart_items: Cart['items'],
-  product_id: string
+  product_id: string,
 ) => {
   const anyProductInCart = cart_items?.some(
-    (item) => item.product_id === product_id
+    (item) => item.product_id === product_id,
   );
 
   // Is this specific product in the cart?
   const productInCart = cart_items?.some(
-    (item) => item.product_id === product_id
+    (item) => item.product_id === product_id,
   );
 
   return {
@@ -540,7 +546,7 @@ export const productItemInCart = (
 
 export const lowestTicketTier = (ticket_tiers: TicketTier[]) => {
   const lowestTier = ticket_tiers.reduce((lowest: any, tier: any) =>
-    Number(tier.amount) < Number(lowest.amount) ? tier : lowest
+    Number(tier.amount) < Number(lowest.amount) ? tier : lowest,
   );
   return `${formatMoney(Number(lowestTier.amount), lowestTier.currency)}+`;
 };
@@ -588,13 +594,13 @@ export const formatLabel = (val: string) =>
     .map((word) =>
       word.toUpperCase() === 'NIN'
         ? 'NIN'
-        : word.charAt(0).toUpperCase() + word.slice(1)
+        : word.charAt(0).toUpperCase() + word.slice(1),
     )
     .join(' ');
 
 export const areAllOnboardingStepsPresent = (
   steps: OnboardingStep[],
-  onboard_processes: BusinessProfileFull['onboarding_status']['onboard_processes']
+  onboard_processes: BusinessProfileFull['onboarding_status']['onboard_processes'],
 ): boolean => {
   for (let i = 0; i < steps.length; i++) {
     if (!onboard_processes?.includes(steps[i].process)) {
@@ -609,7 +615,7 @@ export const DEFAULT_COUNTRY = 'NG';
 
 export const isBusiness = (role: SystemRole) => {
   return [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN].includes(
-    role
+    role,
   );
 };
 
@@ -1063,3 +1069,23 @@ export const COUNTRIES = [
 ];
 
 export const INVOICE_ID_STORAGE_KEY = 'INVOICE_ID';
+
+export const getInviteRole = ({
+  businessInviteRole,
+  superAdmin = false,
+}: {
+  businessInviteRole: BusinessInviteRole;
+  superAdmin?: boolean;
+}) => {
+  return superAdmin
+    ? 'Super Admin'
+    : businessInviteRole === BusinessInviteRole.BUSINESS_ADMIN
+      ? 'Admin'
+      : 'Tutor';
+};
+
+export const listFromNumber = (num: number) => {
+  return Array.from({ length: num }, (_, i) => i);
+};
+
+export const brandPreffix = 'TC';

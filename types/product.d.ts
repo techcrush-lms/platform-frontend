@@ -2,10 +2,13 @@ import { ProductStatus, ProductType, TicketTierStatus } from '@/lib/utils';
 import { Media } from './multimedia';
 import { Product } from './org';
 import {
+  CourseTutorProps,
   OtherCurrencyProps,
   PhysicalProductGender,
   PhysicalProductType,
 } from '@/lib/schema/product.schema';
+import { Multimedia } from './chat-group';
+import { Cohort } from './cohort';
 
 export interface BusinessInfo {
   id: string;
@@ -145,6 +148,8 @@ export interface CreatorBasic {
 export interface CategoryWithCreator {
   id: string;
   name: string;
+  description: string;
+  multimedia: Multimedia;
   creator_id: string;
   created_at: string; // ISO datetime string
   updated_at: string; // ISO datetime string
@@ -167,6 +172,7 @@ export interface Course {
   id: string;
   title: string;
   slug: string;
+  type: ProductType;
   description: string;
   price: string; // You can change this to `number` if it's numeric in actual use
   original_price: string; // You can change this to `number` if it's numeric in actual use
@@ -179,9 +185,12 @@ export interface Course {
   archived_at: string | null;
   creator_id: string;
   created_at: string;
+  classroom: number;
+  tutors: CourseTutorProps[];
   creator: CreatorBasic;
   multimedia: Multimedia;
   category: Category;
+  cohort: Cohort;
   other_currencies: OtherCurrencyProps[];
 }
 
@@ -210,6 +219,7 @@ export interface CourseDetails {
   creator: Creator;
   multimedia: Multimedia;
   category: Category;
+  cohort: Cohort;
   other_currencies: OtherCurrencyProps[];
 }
 

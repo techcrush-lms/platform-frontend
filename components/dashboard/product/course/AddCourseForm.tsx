@@ -28,6 +28,7 @@ import { createCourse } from '@/redux/slices/courseSlice';
 import { updateOnboardingProcess } from '@/redux/slices/orgSlice';
 import { Globe } from 'lucide-react';
 import useCurrencies from '@/hooks/page/useCurrencies';
+import useCohorts from '@/hooks/page/useCohorts';
 
 const defaultValue = {
   title: '',
@@ -37,6 +38,7 @@ const defaultValue = {
   price: 0,
   original_price: 0,
   category_id: '',
+  cohort_id: '',
   other_currencies: [],
 };
 
@@ -45,7 +47,9 @@ const baseUrl = process.env.NEXT_PUBLIC_WEBSITE_URL; // change to your actual ba
 const AddCourseForm = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+
   const { categories } = useProductCategory();
+  const { cohorts } = useCohorts();
   const { foreignCurrencies } = useCurrencies();
   const { org } = useSelector((state: RootState) => state.org);
 
@@ -60,7 +64,7 @@ const AddCourseForm = () => {
 
   // Handle input changes (supports nested other_currencies)
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
 
@@ -93,8 +97,8 @@ const AddCourseForm = () => {
                   ? +value
                   : undefined
                 : value
-                ? +value
-                : 0,
+                  ? +value
+                  : 0,
           };
 
           return { ...prev, other_currencies: updated };
@@ -135,11 +139,11 @@ const AddCourseForm = () => {
           business_id: org?.id,
           onUploadProgress: (event) => {
             const percent = Math.round(
-              (event.loaded * 100) / (event.total || 1)
+              (event.loaded * 100) / (event.total || 1),
             );
             setUploadProgress(percent);
           },
-        })
+        }),
       );
 
       if (response.type === 'multimedia-upload/image/rejected') {
@@ -189,25 +193,25 @@ const AddCourseForm = () => {
             original_price: +body.original_price!,
           },
           business_id: org?.id!,
-        })
+        }),
       ).unwrap();
 
       // Update onboarding process
       if (
         !org?.onboarding_status.onboard_processes?.includes(
-          OnboardingProcess.PRODUCT_CREATION
+          OnboardingProcess.PRODUCT_CREATION,
         )
       ) {
         await dispatch(
           updateOnboardingProcess({
             business_id: org?.id!,
             process: OnboardingProcess.PRODUCT_CREATION,
-          })
+          }),
         );
       }
 
-      toast.success('Course created successfully!');
-      router.push(`/products/courses/${response.data.id}/contents`);
+      toast.success('Learning track created successfully!');
+      router.push(`/courses/tracks/${response.data.id}/tutors`);
     } catch (error: any) {
       console.error('Submission failed:', error);
       toast.error(error.message);
@@ -256,6 +260,7 @@ const AddCourseForm = () => {
     body.slug &&
     body.description &&
     body.category_id &&
+    body.cohort_id &&
     body.price &&
     body.multimedia_id;
 
@@ -265,7 +270,7 @@ const AddCourseForm = () => {
         <Input
           type='text'
           name='title'
-          placeholder='Your Course Title Goes Here'
+          placeholder='Your Learning Track Title Goes Here'
           className='w-full border rounded-md px-4 lg:text-2xl text-gray-600 dark:text-white placeholder-gray-400 border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 font-bold'
           value={body.title}
           onChange={handleChange}
@@ -323,11 +328,11 @@ const AddCourseForm = () => {
           />
         </div>
 
-        {/* Category and Short link Fields */}
+        {/* Learning track and Short link Fields */}
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
           <div>
             <label className='text-sm font-medium mb-1 block'>
-              Category <span className='text-red-500'>*</span>
+              Learning Track <span className='text-red-500'>*</span>
             </label>
             <Select
               value={body.category_id}
@@ -374,6 +379,33 @@ const AddCourseForm = () => {
                 </span>
               </p>
             )}
+          </div>
+        </div>
+
+        {/* Cohort */}
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+          <div>
+            <label className='text-sm font-medium mb-1 block'>
+              Cohort <span className='text-red-500'>*</span>
+            </label>
+            <Select
+              value={body.cohort_id}
+              onValueChange={(value) =>
+                setBody((prev) => ({ ...prev, cohort_id: value }))
+              }
+              required
+            >
+              <SelectTrigger id='cohort' className='w-full'>
+                <SelectValue placeholder='Select your cohort' />
+              </SelectTrigger>
+              <SelectContent>
+                {cohorts.map((cohort: { id: string; name: string }, index) => (
+                  <SelectItem key={index} value={cohort.id}>
+                    {cohort.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -467,7 +499,7 @@ const AddCourseForm = () => {
           <Textarea
             rows={3}
             name='description'
-            placeholder='Enter Course Description'
+            placeholder='Enter Content Description'
             className='w-full rounded-md px-4 py-3'
             value={body.description}
             onChange={(e) =>
@@ -485,8 +517,8 @@ const AddCourseForm = () => {
             className={cn(
               'text-white px-8 py-3 rounded-md font-medium',
               isFormValid
-                ? 'bg-primary-main hover:bg-blue-700'
-                : 'bg-primary-faded cursor-not-allowed'
+                ? 'bg-primary-main hover:bg-red-700'
+                : 'bg-primary-faded cursor-not-allowed',
             )}
           >
             {isSubmitting ? (

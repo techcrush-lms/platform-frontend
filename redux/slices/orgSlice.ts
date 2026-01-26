@@ -23,6 +23,7 @@ import {
   UpdateOnboardingProcessProps,
 } from '@/lib/schema/org.schema';
 import {
+  BusinessInviteRole,
   BusinessOwnerOrgRole,
   ContactInviteStatus,
   onboardingProcesses,
@@ -144,13 +145,13 @@ export const fetchOrgs = createAsyncThunk(
       '/onboard/fetch-businesses',
       {
         params,
-      }
+      },
     );
 
     return {
       organizations: data.data,
     };
-  }
+  },
 );
 
 // Async thunk to fetch organization details
@@ -158,13 +159,13 @@ export const fetchOrg = createAsyncThunk(
   'onboard/fetch-business-info/:id',
   async (id: string) => {
     const { data } = await api.get<BusinessProfileFullReponse>(
-      `/onboard/fetch-business-info/${id}`
+      `/onboard/fetch-business-info/${id}`,
     );
 
     return {
       organization: data.data,
     };
-  }
+  },
 );
 
 // Async thunk to save organization info
@@ -174,7 +175,7 @@ export const saveOrgInfo = createAsyncThunk(
     try {
       const { data } = await api.post(
         '/onboard/save-business-info',
-        credentials
+        credentials,
       );
 
       return {
@@ -183,7 +184,7 @@ export const saveOrgInfo = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.response?.data || 'Failed to save org info');
     }
-  }
+  },
 );
 
 // Async thunk to save withdrawal account
@@ -193,7 +194,7 @@ export const saveWithdrawalAccount = createAsyncThunk(
     try {
       const { data } = await api.post(
         '/onboard/save-withdrawal-account',
-        credentials
+        credentials,
       );
 
       return {
@@ -201,10 +202,10 @@ export const saveWithdrawalAccount = createAsyncThunk(
       };
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data || 'Failed to save withdrawal account info'
+        error.response?.data || 'Failed to save withdrawal account info',
       );
     }
-  }
+  },
 );
 
 // Async thunk to invite team member
@@ -219,10 +220,10 @@ export const inviteMember = createAsyncThunk(
       };
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data || 'Failed to invite team member'
+        error.response?.data || 'Failed to invite team member',
       );
     }
-  }
+  },
 );
 
 // Async thunk to reinvite team member
@@ -237,10 +238,10 @@ export const reinviteMember = createAsyncThunk(
       };
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data || 'Failed to reinvite team member'
+        error.response?.data || 'Failed to reinvite team member',
       );
     }
-  }
+  },
 );
 
 // Async thunk to accept invite
@@ -256,7 +257,7 @@ export const acceptInvite = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.response?.data || 'Failed to accept invite');
     }
-  }
+  },
 );
 
 // Async thunk to fetch invites
@@ -278,9 +279,9 @@ export const fetchInvites = createAsyncThunk(
       startDate?: string;
       endDate?: string;
       business_id?: string;
-      role?: BusinessOwnerOrgRole;
+      role?: BusinessInviteRole;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const params: Record<string, any> = {};
@@ -300,7 +301,7 @@ export const fetchInvites = createAsyncThunk(
         {
           params,
           headers,
-        }
+        },
       );
 
       return {
@@ -310,7 +311,7 @@ export const fetchInvites = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.response?.data || 'Failed to fetch invites');
     }
-  }
+  },
 );
 
 // Async thunk to view invite by token
@@ -319,7 +320,7 @@ export const viewInviteByToken = createAsyncThunk(
   async ({ token }: { token: string }, { rejectWithValue }) => {
     try {
       const { data } = await api.get<ContactInviteDetailsResponse>(
-        `/contact/invite/${token}`
+        `/contact/invite/${token}`,
       );
 
       return {
@@ -328,7 +329,27 @@ export const viewInviteByToken = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.response?.data || 'Failed to view invite');
     }
-  }
+  },
+);
+
+// Async thunk to view invite by ID
+export const viewInvite = createAsyncThunk(
+  'contact/invite-details/:id',
+  async ({ id }: { id: string }, { rejectWithValue }) => {
+    try {
+      const { data } = await api.get<ContactInviteDetailsResponse>(
+        `/contact/invite-details/${id}`,
+      );
+
+      return {
+        data: data.data,
+      };
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data || 'Failed to view invite details',
+      );
+    }
+  },
 );
 
 // Async thunk to remove member
@@ -344,7 +365,7 @@ export const removeMember = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.response?.data || 'Failed to remove member');
     }
-  }
+  },
 );
 
 // Async thunk to deactivate member
@@ -353,7 +374,7 @@ export const deactivateMember = createAsyncThunk(
   async ({ invite_id }: { invite_id: string }, { rejectWithValue }) => {
     try {
       const { data } = await api.post(
-        `/contact/deactivate-member/${invite_id}`
+        `/contact/deactivate-member/${invite_id}`,
       );
 
       return {
@@ -361,10 +382,10 @@ export const deactivateMember = createAsyncThunk(
       };
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data || 'Failed to deactivate member'
+        error.response?.data || 'Failed to deactivate member',
       );
     }
-  }
+  },
 );
 
 // Async thunk to restore member
@@ -379,10 +400,10 @@ export const restoreMember = createAsyncThunk(
       };
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data || 'Failed to restore member'
+        error.response?.data || 'Failed to restore member',
       );
     }
-  }
+  },
 );
 
 // Async Thunk to fetch banks
@@ -400,7 +421,7 @@ export const fetchKYC = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 // Async Thunk to fetch banks
@@ -419,7 +440,7 @@ export const resolveAccount = createAsyncThunk(
     try {
       const { data } = await api.post<ResolveAccountResponse>(
         '/auth/resolve-account',
-        credentials
+        credentials,
       );
 
       return {
@@ -428,10 +449,10 @@ export const resolveAccount = createAsyncThunk(
     } catch (error: any) {
       // console.log(error);
       return rejectWithValue(
-        error.response?.data || 'Failed to resolve account'
+        error.response?.data || 'Failed to resolve account',
       );
     }
-  }
+  },
 );
 
 // Async thunk to fetch paginated business customers
@@ -455,7 +476,7 @@ export const fetchCustomers = createAsyncThunk(
       startDate?: string;
       endDate?: string;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     const params: Record<string, any> = {};
 
@@ -473,7 +494,7 @@ export const fetchCustomers = createAsyncThunk(
         `/contact/fetch-customers`,
         {
           params,
-        }
+        },
       );
 
       return {
@@ -483,10 +504,10 @@ export const fetchCustomers = createAsyncThunk(
       };
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || 'Failed to fetch customers'
+        error.response?.data?.message || 'Failed to fetch customers',
       );
     }
-  }
+  },
 );
 
 // Async thunk to fetch business customer details
@@ -500,11 +521,11 @@ export const fetchCustomer = createAsyncThunk(
       id?: string;
       business_id?: string;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const { data } = await api.get<CustomerDetailsResponse>(
-        `/contact/fetch-customer/${id}`
+        `/contact/fetch-customer/${id}`,
       );
 
       return {
@@ -512,10 +533,10 @@ export const fetchCustomer = createAsyncThunk(
       };
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || 'Failed to fetch customer details'
+        error.response?.data?.message || 'Failed to fetch customer details',
       );
     }
-  }
+  },
 );
 
 // Async thunk to import users
@@ -526,7 +547,7 @@ export const importUsers = createAsyncThunk(
       credentials,
       business_id,
     }: { credentials: ImportUsersProps; business_id: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const headers: Record<string, any> = {};
@@ -543,7 +564,7 @@ export const importUsers = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.response?.data || 'Failed to import users');
     }
-  }
+  },
 );
 
 // Async thunk to export users
@@ -555,7 +576,7 @@ export const exportUsers = createAsyncThunk(
       role,
       business_id,
     }: { format: DocFormat; role: BusinessOwnerOrgRole; business_id: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const params: Record<string, any> = {};
@@ -570,7 +591,7 @@ export const exportUsers = createAsyncThunk(
         {
           headers,
           params,
-        }
+        },
       );
 
       return {
@@ -580,7 +601,7 @@ export const exportUsers = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.response?.data || 'Failed to export users');
     }
-  }
+  },
 );
 
 // Async thunk to update onboarding process
@@ -588,7 +609,7 @@ export const updateOnboardingProcess = createAsyncThunk(
   'onboard/update-onboarding-process',
   async (
     { business_id, process }: UpdateOnboardingProcessProps,
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const headers: Record<string, any> = {};
@@ -600,16 +621,16 @@ export const updateOnboardingProcess = createAsyncThunk(
         { process },
         {
           headers,
-        }
+        },
       );
 
       return data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data || 'Failed to update onboarding process'
+        error.response?.data || 'Failed to update onboarding process',
       );
     }
-  }
+  },
 );
 
 // Async thunk to create customer
@@ -620,7 +641,7 @@ export const createCustomer = createAsyncThunk(
       business_id,
       payload,
     }: { business_id: string; payload: CreateCustomerProps },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const headers: Record<string, any> = {};
@@ -632,16 +653,16 @@ export const createCustomer = createAsyncThunk(
         payload,
         {
           headers,
-        }
+        },
       );
 
       return data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data || 'Failed to create customer'
+        error.response?.data || 'Failed to create customer',
       );
     }
-  }
+  },
 );
 
 const orgSlice = createSlice({
@@ -659,7 +680,7 @@ const orgSlice = createSlice({
     },
     switchToOrg: (
       state,
-      action: PayloadAction<UpdateOnboardingProcessProps>
+      action: PayloadAction<UpdateOnboardingProcessProps>,
     ) => {
       const { business_id: orgId, process } = action.payload;
 
@@ -672,7 +693,7 @@ const orgSlice = createSlice({
             ...matchedOrg.onboarding_status,
             ...(process && {
               onboard_processes: Array.from(
-                new Set([...onboardingProcesses(state.org!), process])
+                new Set([...onboardingProcesses(state.org!), process]),
               ),
             }),
           },
@@ -684,20 +705,20 @@ const orgSlice = createSlice({
     clearOrg: (state) => {
       state.org = null;
     },
-    viewInvite: (state, action: PayloadAction<string>) => {
-      const inviteId = action.payload;
-      const matchedInvite = state.invites.find(
-        (invite) => invite.id === inviteId
-      );
+    // viewInvite: (state, action: PayloadAction<string>) => {
+    //   const inviteId = action.payload;
+    //   const matchedInvite = state.invites.find(
+    //     (invite) => invite.id === inviteId,
+    //   );
 
-      if (matchedInvite) {
-        state.invite = {
-          ...matchedInvite,
-        } as ContactInvite;
-      } else {
-        state.error = 'Invite not found in local state';
-      }
-    },
+    //   if (matchedInvite) {
+    //     state.invite = {
+    //       ...matchedInvite,
+    //     } as ContactInvite;
+    //   } else {
+    //     state.error = 'Invite not found in local state';
+    //   }
+    // },
     setOnboardingStep: (state, action: PayloadAction<number>) => {
       if (state.org?.onboarding_status) {
         state.org.onboarding_status.current_step = action.payload;
@@ -814,6 +835,18 @@ const orgSlice = createSlice({
         state.loading = false;
         state.error = 'Failed to fetch invite';
       })
+      .addCase(viewInvite.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(viewInvite.fulfilled, (state, action) => {
+        state.loading = false;
+        state.invite = action.payload.data;
+      })
+      .addCase(viewInvite.rejected, (state, action) => {
+        state.loading = false;
+        state.error = 'Failed to fetch invite details';
+      })
       .addCase(removeMember.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -903,7 +936,7 @@ const orgSlice = createSlice({
         const merged = [...state.customers, ...action.payload.customers];
 
         state.customers = Array.from(
-          new Map(merged.map((customer) => [customer.id, customer])).values()
+          new Map(merged.map((customer) => [customer.id, customer])).values(),
         );
 
         state.page_customers = action.payload.customers;
@@ -964,7 +997,7 @@ const orgSlice = createSlice({
               new Set([
                 ...onboardingProcesses(state.org!),
                 ...action.payload.data.onboard_processes,
-              ])
+              ]),
             ),
           },
         } as BusinessProfileFull | any;
@@ -994,7 +1027,6 @@ export const {
   setPerPage,
   switchToOrg,
   clearOrg,
-  viewInvite,
   setOnboardingStep,
   selectCustomer,
 } = orgSlice.actions;

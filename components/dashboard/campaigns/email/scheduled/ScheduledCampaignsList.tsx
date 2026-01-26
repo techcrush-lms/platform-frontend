@@ -42,8 +42,8 @@ const ScheduledNotificationsList = () => {
         extra={
           <>
             <Link
-              href={`/campaigns/email/schedule`}
-              className='text-white bg-primary-main hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-main dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex items-center gap-1'
+              href={`/notifications/email/schedule`}
+              className='text-white bg-primary-main hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-main dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800 flex items-center gap-1'
             >
               {' '}
               <HiPlus />
@@ -76,11 +76,8 @@ const ScheduledNotificationsList = () => {
           </thead>
 
           {loading ? (
-
             <LoadingSkeleton length={12} columns={4} />
-
           ) : (
-
             <tbody>
               {notifications.map((notification: any) => (
                 <ScheduledNotificationItem notification={notification} />
@@ -90,9 +87,7 @@ const ScheduledNotificationsList = () => {
                 <TableEndRecord colspan={8} text={noFoundText} />
               )}
             </tbody>
-
           )}
-
         </table>
       </div>
       {/* Pagination */}
@@ -106,7 +101,6 @@ const ScheduledNotificationsList = () => {
           noMoreNextPage={notifications.length === 0}
         />
       )}
-
     </>
   );
 };

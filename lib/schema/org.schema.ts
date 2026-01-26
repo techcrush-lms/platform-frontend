@@ -42,6 +42,7 @@ export const inviteContactSchema = Joi.object({
   business_id: Joi.string().required(),
   email: Joi.string().required(),
   name: Joi.string().required(),
+  role: Joi.string().required(),
 });
 export interface InviteContactProps {
   business_id: string;

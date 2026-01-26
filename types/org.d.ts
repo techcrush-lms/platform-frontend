@@ -6,7 +6,7 @@ import {
   OnboardingProcess,
 } from '@/lib/utils';
 import { SubscriptionPlan } from './subscription-plan';
-import { Ticket } from './product';
+import { Course, Ticket } from './product';
 import { OtherCurrencyProps } from '@/lib/schema/product.schema';
 
 export interface BusinessProfile {
@@ -137,6 +137,18 @@ export interface ContactUser {
     role_id: string;
   };
   profile: UserProfile | null;
+  courses_tutoring?: CourseTutor[];
+}
+
+export interface CourseTutor {
+  id: string;
+  tutor_id: string;
+  course_id: string;
+  created_at: string;
+  deleted_at: string;
+  updated_at: string;
+  group_link: string;
+  course: Course;
 }
 
 export interface ContactInvite {
@@ -150,6 +162,7 @@ export interface ContactInvite {
   status: ContactInviteStatus; // Assuming possible status values
   expires_at: string | null; // ISO date string or null
   created_at: string; // ISO date string
+  role: string;
 }
 
 export interface ContactInviteResponse {

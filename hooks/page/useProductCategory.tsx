@@ -22,6 +22,9 @@ const useProductCategory = () => {
     endDate,
     onClickNext,
     onClickPrev,
+    handleSearchSubmit,
+    handleFilterByDateSubmit,
+    handleRefresh,
   } = useQueryParams(categories);
 
   useEffect(() => {
@@ -32,7 +35,7 @@ const useProductCategory = () => {
         ...(q && { q }),
         ...(startDate && { startDate }),
         ...(endDate && { endDate }),
-      })
+      }),
     ).unwrap();
   }, [dispatch, currentPage, perPage, q, startDate, endDate]);
 
@@ -40,6 +43,13 @@ const useProductCategory = () => {
     categories,
     loading: categoriesLoading,
     error,
+    onClickNext,
+    onClickPrev,
+    handleSearchSubmit,
+    handleFilterByDateSubmit,
+    handleRefresh,
+    count,
+    currentPage,
   };
 };
 

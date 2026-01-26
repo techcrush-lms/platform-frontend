@@ -1,4 +1,5 @@
 import { Gender } from '@/lib/utils';
+import { BusinessContactDetails } from './notification';
 
 // Business Interface
 export interface Business {
@@ -63,6 +64,7 @@ export interface Profile {
     date_of_birth: string; // ISO 8601 format
   };
   accessible_businesses?: AccessibleBusiness[];
+  business_contacts?: BusinessContactDetails[];
 }
 
 export interface UserProfile {

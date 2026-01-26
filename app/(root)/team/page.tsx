@@ -25,7 +25,11 @@ import {
 } from '@/redux/slices/orgSlice';
 import toast from 'react-hot-toast';
 import LoadingIcon from '@/components/ui/icons/LoadingIcon';
-import { BusinessOwnerOrgRole, OnboardingProcess } from '@/lib/utils';
+import {
+  BusinessInviteRole,
+  BusinessOwnerOrgRole,
+  OnboardingProcess,
+} from '@/lib/utils';
 
 const defaultValue: InviteContactProps = {
   email: '',
@@ -45,7 +49,7 @@ const Team = () => {
     business_id: org?.id!,
   });
 
-  const [tab, setTab] = useState('business-administrator');
+  const [tab, setTab] = useState(BusinessInviteRole.BUSINESS_ADMIN);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -71,7 +75,10 @@ const Team = () => {
     try {
       setIsSubmitting(true);
 
-      const { error, value } = inviteContactSchema.validate(body);
+      const { error, value } = inviteContactSchema.validate({
+        ...body,
+        role: tab,
+      });
       if (error) throw new Error(error.details[0].message);
 
       // Submit logic here
@@ -103,7 +110,7 @@ const Team = () => {
       // Fetch
       dispatch(
         fetchInvites({
-          role: BusinessOwnerOrgRole.BUSINESS_ADMIN,
+          role: tab,
           ...(org?.id && { business_id: org.id }),
         })
       ).unwrap();

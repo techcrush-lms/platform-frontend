@@ -37,9 +37,8 @@ const TinyMceEditor = ({
     `background: url("${
       organization?.logo_url || '/default-logo.png'
     }") no-repeat center;
-  background-size: 70px auto;
+  background-size: 100px auto;
   padding: 10px;
-  background-size: 70px auto;
   height: 70px;
   margin-bottom: 20px;`;
 

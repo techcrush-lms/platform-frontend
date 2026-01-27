@@ -4,6 +4,8 @@ export interface AnalyticsReponse {
 }
 
 export interface AnalyticsStats {
+  enrollments: number;
+  total_assessments: number;
   total_revenue: {
     total: string;
     raw_total: string;

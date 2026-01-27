@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/Button';
-import { formatMoney, ProductStatus } from '@/lib/utils';
+import { formatMoney, isTutor, ProductStatus } from '@/lib/utils';
 import { CourseTutor } from '@/types/org';
 import { capitalize } from 'lodash';
 import Link from 'next/link';
@@ -20,8 +20,7 @@ const TeamMemberAssignedCourseDetails = ({
   const params = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const [isOpen, setIsOpen] = useState(false);
-
-  const {} = useSelector((state: RootState) => state.org);
+  const { profile } = useSelector((state: RootState) => state.auth);
 
   const handleModalOpen = () => {
     setIsOpen(true);
@@ -30,6 +29,10 @@ const TeamMemberAssignedCourseDetails = ({
   const handleNextAction = async () => {
     await dispatch(viewInvite({ id: params?.id as string }));
   };
+
+  const viewLink = isTutor(profile?.role.role_id!)
+    ? `/assigned-courses/${course_tutoring.course_id}/students`
+    : `/courses/tracks/${course_tutoring.course_id}/edit`;
 
   return (
     <div
@@ -56,15 +59,17 @@ const TeamMemberAssignedCourseDetails = ({
             {course_tutoring.course.title}
           </h4>
 
-          <span
-            className={`text-xs font-medium px-2 py-1 rounded-full ${
-              course_tutoring.course.status === ProductStatus.PUBLISHED
-                ? 'bg-green-100 text-green-700 dark:bg-green-800/20 dark:text-green-400'
-                : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-800/20 dark:text-yellow-400'
-            }`}
-          >
-            {capitalize(course_tutoring.course.status)}
-          </span>
+          {!isTutor(profile?.role.role_id!) && (
+            <span
+              className={`text-xs font-medium px-2 py-1 rounded-full ${
+                course_tutoring.course.status === ProductStatus.PUBLISHED
+                  ? 'bg-green-100 text-green-700 dark:bg-green-800/20 dark:text-green-400'
+                  : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-800/20 dark:text-yellow-400'
+              }`}
+            >
+              {capitalize(course_tutoring.course.status)}
+            </span>
+          )}
         </div>
 
         <p className='text-sm text-gray-600 dark:text-gray-300 line-clamp-2'>
@@ -89,28 +94,33 @@ const TeamMemberAssignedCourseDetails = ({
           </span>
         </div>
 
-        <div className='text-xs text-gray-500 dark:text-gray-400'>
-          Published on{' '}
-          {new Date(course_tutoring.course.published_at!).toLocaleDateString()}
-        </div>
+        {course_tutoring.course.status === ProductStatus.PUBLISHED && (
+          <div className='text-xs text-gray-500 dark:text-gray-400'>
+            Published on{' '}
+            {new Date(
+              course_tutoring.course.published_at!,
+            ).toLocaleDateString()}
+          </div>
+        )}
       </div>
 
       {/* Action */}
       <div className='flex items-center gap-2'>
-        <Button
-          type='button'
-          variant='primary'
-          size='sm'
-          onClick={handleModalOpen}
-        >
-          Assign
-        </Button>
-        <Link
-          href={`/courses/tracks/${course_tutoring.course_id}/edit`}
-          className='text-sm bg-outline'
-        >
-          View
-        </Link>
+        {!isTutor(profile?.role.role_id!) && (
+          <Button
+            type='button'
+            variant='primary'
+            size='sm'
+            onClick={handleModalOpen}
+          >
+            Assign
+          </Button>
+        )}
+        {course_tutoring.course.status === ProductStatus.PUBLISHED && (
+          <Link href={viewLink} className='text-sm bg-outline'>
+            View
+          </Link>
+        )}
       </div>
 
       <AssignCourseModal

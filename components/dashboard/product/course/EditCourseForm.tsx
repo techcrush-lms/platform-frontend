@@ -400,7 +400,8 @@ const EditCourseForm = () => {
           </div>
         </div>
 
-        <div className='flex gap-3 w-full'>
+        <div className='w-full flex flex-col sm:flex-row sm:gap-3 gap-4'>
+          {/* NGN Price */}
           <div className='flex-1'>
             <label className='text-sm font-medium mb-1 block'>
               Price (NGN)<span className='text-red-500'>*</span>
@@ -413,23 +414,29 @@ const EditCourseForm = () => {
               onChange={handleChange}
               required
             />
-            <p className='mt-2 text-xs'>Zero (0) represents a free product</p>
           </div>
+
+          {/* Foreign Currencies */}
           {foreignCurrencies()?.map((product_currency, index) => (
-            <div key={index} className='flex-1'>
+            <div key={index} className='flex-1 mt-4 sm:mt-0'>
               <label className='text-sm font-medium mb-1 block'>
-                Price ({product_currency.currency}) *
+                Price ({product_currency.currency})
+                <span className='text-red-500'>*</span>
               </label>
               <Input
                 type='text'
                 name={`other_currencies[${index}].price`}
                 className='w-full rounded-md py-3'
-                value={body.other_currencies?.[index]?.price}
+                value={body.other_currencies?.[index]?.price || ''}
                 onChange={handleChange}
                 required
               />
             </div>
           ))}
+        </div>
+
+        <div>
+          <p className='mt-2 text-xs'>Zero (0) represents a free product</p>
         </div>
 
         {/* Checkbox toggle */}

@@ -10,10 +10,9 @@ import { AppDispatch, RootState } from '@/redux/store';
 import Icon from '@/components/ui/Icon';
 import Link from 'next/link';
 import useOrgs from '@/hooks/page/useOrgs';
-import { IoIosAdd } from 'react-icons/io';
 import { Settings, LogOut } from 'lucide-react';
 import { fetchOrg } from '@/redux/slices/orgSlice';
-import { cn, getAvatar, SystemRole } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -24,9 +23,6 @@ const Profile = ({ handleClose }: { handleClose?: () => void }) => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const { profile } = useProfile();
-  const { orgs } = useOrgs();
-  const { org: organization } = useSelector((state: RootState) => state.org);
-  const { isConnected } = useSocket();
 
   const [logoutOpenModal, setLogoutOpenModal] = useState(false);
   const [allowAction, setAllowAction] = useState(false);
@@ -34,10 +30,6 @@ const Profile = ({ handleClose }: { handleClose?: () => void }) => {
   const handleLogoutNavigation = () => {
     router.push('/logout');
     if (typeof handleClose === 'function') handleClose();
-  };
-
-  const handleSwitchOrg = (id: string) => {
-    dispatch(fetchOrg(id));
   };
 
   useEffect(() => {
@@ -67,7 +59,7 @@ const Profile = ({ handleClose }: { handleClose?: () => void }) => {
         <DropdownMenuContent
           align='end'
           className={cn(
-            'z-50 mt-2 w-64 text-base bg-white divide-y divide-gray-100 shadow-xl dark:bg-gray-700 dark:divide-gray-600 rounded-lg border border-gray-200 dark:border-gray-600'
+            'z-50 mt-2 w-64 text-base bg-white divide-y divide-gray-100 shadow-xl dark:bg-gray-700 dark:divide-gray-600 rounded-lg border border-gray-200 dark:border-gray-600',
           )}
         >
           <div className='py-2 px-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-600 dark:to-gray-700'>

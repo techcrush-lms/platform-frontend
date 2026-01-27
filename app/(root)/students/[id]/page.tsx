@@ -19,31 +19,31 @@ const Customer = () => {
       <div className='section-container space-y-6'>
         {/* Page Heading */}
         <PageHeading
-          title='Customer Details'
-          brief='Manage your customer'
+          title='Student Details'
+          brief='Manage your student'
           enableBreadCrumb
-          layer2='Customer'
-          layer3='Customer Details'
-          layer2Link='/customers'
+          layer2='Students'
+          layer3='Student Details'
+          layer2Link='/students'
           enableBackButton
           ctaButtons={
             <div className='flex flex-shrink-0 self-start gap-2'>
-              <Button
+              {/* <Button
                 variant='primary'
                 className='text-md bg-primary gap-1 py-2 rounded-lg flex items-center px-3'
                 onClick={() => setChatOpen(!chatOpen)}
               >
                 <IoIosChatboxes className='text-lg' />
                 {chatOpen ? 'Close Chat' : 'Chat'}
-              </Button>
-              <Link
-                href={`/campaigns/email/compose?customerId=${customer?.id}`}
+              </Button> */}
+              {/* <Link
+                href={`/no/email/compose?customerId=${customer?.id}`}
                 className='text-md border-primary-main text-primary-main py-1 dark:text-white hover:bg-primary-800 hover:text-white px-3 flex items-center gap-1 border rounded-lg'
                 // onClick={() => setChatOpen(!chatOpen)}
               >
                 <PlusIcon className='text-md' />
                 Compose
-              </Link>
+              </Link> */}
             </div>
           }
         />

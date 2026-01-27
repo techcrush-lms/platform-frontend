@@ -8,10 +8,10 @@ const Customers = () => {
       <div className='section-container space-y-6'>
         {/* Header */}
         <PageHeading
-          title='Client Management'
-          brief='Monitor your business growth and engagement trends overtime'
+          title='Students Management'
+          brief='Monitor student growth and engagement trends over time'
           enableBreadCrumb={true}
-          layer2='Client Management'
+          layer2='Students Management'
         />
 
         <CustomersList />

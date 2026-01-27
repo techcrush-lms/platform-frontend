@@ -40,14 +40,14 @@ const CustomersList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { org } = useSelector((state: RootState) => state.org);
   const { exportUserLoading, importUserLoading } = useSelector(
-    (state: RootState) => state.org
+    (state: RootState) => state.org,
   );
 
   const [showExportModal, setShowExportModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<DocFormat>(
-    DocFormat.csv
+    DocFormat.csv,
   );
   const [importFile, setImportFile] = useState<File | null>(null);
   const [exportData, setExportData] = useState<any>(null);
@@ -91,7 +91,7 @@ const CustomersList = () => {
     const csvContent = [
       'name,email,phone,role',
       ...importTemplate.map(
-        (row) => `${row.name},${row.email},${row.phone},${row.role}`
+        (row) => `${row.name},${row.email},${row.phone},${row.role}`,
       ),
     ].join('\n');
 
@@ -179,7 +179,7 @@ const CustomersList = () => {
     const lines = csvText.split('\n').filter((line) => line.trim());
     if (lines.length < 2) {
       throw new Error(
-        'CSV file must have at least a header row and one data row'
+        'CSV file must have at least a header row and one data row',
       );
     }
 
@@ -209,7 +209,7 @@ const CustomersList = () => {
       // Validate required fields
       if (!row.name || !row.email) {
         throw new Error(
-          `Row ${i + 1}: Missing required fields (name and email are required)`
+          `Row ${i + 1}: Missing required fields (name and email are required)`,
         );
       }
 
@@ -248,8 +248,8 @@ const CustomersList = () => {
         if (missingFields.length > 0) {
           throw new Error(
             `Record ${index + 1}: Missing required fields (${missingFields.join(
-              ', '
-            )})`
+              ', ',
+            )})`,
           );
         }
 
@@ -287,22 +287,22 @@ const CustomersList = () => {
 
       if (jsonData.length < 2) {
         throw new Error(
-          'XLSX file must have at least a header row and one data row'
+          'XLSX file must have at least a header row and one data row',
         );
       }
 
       // Get headers from first row
       const headers = (jsonData[0] as string[]).map((h) =>
-        h?.toString().trim().toLowerCase()
+        h?.toString().trim().toLowerCase(),
       );
       const requiredHeaders = ['name', 'email'];
       const missingHeaders = requiredHeaders.filter(
-        (h) => !headers.includes(h)
+        (h) => !headers.includes(h),
       );
 
       if (missingHeaders.length > 0) {
         throw new Error(
-          `Missing required columns: ${missingHeaders.join(', ')}`
+          `Missing required columns: ${missingHeaders.join(', ')}`,
         );
       }
 
@@ -327,7 +327,7 @@ const CustomersList = () => {
           throw new Error(
             `Row ${
               i + 1
-            }: Missing required fields (name and email are required)`
+            }: Missing required fields (name and email are required)`,
           );
         }
 
@@ -375,7 +375,7 @@ const CustomersList = () => {
         data = await parseXLSX(file);
       } else {
         throw new Error(
-          'Unsupported file format. Please use CSV, JSON, or XLSX files.'
+          'Unsupported file format. Please use CSV, JSON, or XLSX files.',
         );
       }
 
@@ -401,7 +401,7 @@ const CustomersList = () => {
           format: selectedFormat,
           role: BusinessOwnerOrgRole.USER,
           business_id: org.id,
-        })
+        }),
       ).unwrap();
 
       // Store export data and download URL for preview
@@ -450,7 +450,7 @@ const CustomersList = () => {
         importUsers({
           credentials: importData,
           business_id: org.id,
-        })
+        }),
       );
 
       toast.success(`Successfully imported ${parsedData.length} customers`);
@@ -462,7 +462,7 @@ const CustomersList = () => {
       dispatch(
         fetchCustomers({
           ...(org?.id && { business_id: org?.id as string }),
-        })
+        }),
       );
     } catch (error: any) {
       toast.error(error.message || 'Failed to import customers');
@@ -506,15 +506,6 @@ const CustomersList = () => {
                   onClick={() => setShowImportModal(true)}
                 >
                   <Download size={18} />
-                </Button>
-                <Button
-                  size='icon'
-                  variant='primary'
-                  className='text-md text-md flex p-2 gap-2'
-                  title='Get Onboarding Link'
-                  onClick={() => setShowOnboardingModal(true)}
-                >
-                  <Link size={18} />
                 </Button>
               </div>
             </>
@@ -575,7 +566,7 @@ const CustomersList = () => {
           <div className='bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl border border-gray-200 dark:border-gray-700'>
             <div className='flex justify-between items-center mb-6'>
               <h3 className='text-xl font-bold text-gray-900 dark:text-white'>
-                Export Customers
+                Export Students
               </h3>
               <button
                 onClick={() => setShowExportModal(false)}
@@ -585,7 +576,7 @@ const CustomersList = () => {
               </button>
             </div>
             <p className='text-sm text-gray-600 dark:text-gray-400 mb-6'>
-              Select the format for exporting customer data:
+              Select the format for exporting student data:
             </p>
             <div className='grid grid-cols-3 gap-4 mb-8'>
               {Object.values(DocFormat).map((format) => (
@@ -665,19 +656,19 @@ const CustomersList = () => {
             <div className='flex-1 overflow-auto p-6'>
               {/* Stats Cards */}
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-6'>
-                <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
+                <div className='bg-blue-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4'>
                   <div className='flex items-center justify-between'>
                     <div>
-                      <p className='text-sm font-medium text-blue-600 dark:text-blue-400'>
+                      <p className='text-sm font-medium text-red-600 dark:text-red-400'>
                         Total Records
                       </p>
-                      <p className='text-2xl font-bold text-blue-900 dark:text-blue-100'>
+                      <p className='text-2xl font-bold text-red-900 dark:text-red-100'>
                         {exportData?.total || 0}
                       </p>
                     </div>
-                    <div className='p-2 bg-blue-100 dark:bg-blue-800 rounded-lg'>
+                    <div className='p-2 bg-red-100 dark:bg-red-800 rounded-lg'>
                       <IoIosDocument
-                        className='text-blue-600 dark:text-blue-400'
+                        className='text-red-600 dark:text-red-400'
                         size={20}
                       />
                     </div>
@@ -742,10 +733,10 @@ const CustomersList = () => {
                 </div>
                 <div>
                   <h3 className='text-xl font-bold text-gray-900 dark:text-white'>
-                    Import Customers
+                    Import Students
                   </h3>
                   <p className='text-sm text-gray-600 dark:text-gray-400'>
-                    Upload customer data in CSV, JSON, or XLSX format
+                    Upload students data in CSV, JSON, or XLSX format
                   </p>
                 </div>
               </div>
@@ -836,7 +827,7 @@ const CustomersList = () => {
                           Importing...
                         </span>
                       ) : (
-                        'Import Customers'
+                        'Import Students'
                       )}
                     </Button>
                   </div>
@@ -926,109 +917,6 @@ const CustomersList = () => {
                     </div>
                   )}
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Onboarding Link Modal */}
-      {showOnboardingModal && (
-        <div className='fixed inset-0 bg-black/50 backdrop-blur-sm rounded-xl flex items-center justify-center z-50 p-4'>
-          <div className='bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-2xl'>
-            {/* Header */}
-            <div className='flex justify-between items-center p-6 border-b rounded-t-xl border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700'>
-              <div className='flex items-center gap-3'>
-                <div className='p-2 bg-primary-main/10 rounded-lg'>
-                  <Link className='text-primary-main' size={24} />
-                </div>
-                <div>
-                  <h3 className='text-xl font-bold text-gray-900 dark:text-white'>
-                    Onboarding Link
-                  </h3>
-                  <p className='text-sm text-gray-600 dark:text-gray-400'>
-                    Share this link with customers to join your business
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowOnboardingModal(false)}
-                className='text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg'
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className='p-6'>
-              <div className='mb-6'>
-                <h4 className='text-lg font-semibold text-gray-900 dark:text-white mb-2'>
-                  Customer Onboarding Link
-                </h4>
-                <p className='text-sm text-gray-600 dark:text-gray-400 mb-4'>
-                  Copy and share this link with your customers. When they click
-                  the link, they'll be directed to sign up and automatically
-                  join your business.
-                </p>
-              </div>
-
-              {/* Link Display */}
-              <div className='mb-6'>
-                <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-                  Onboarding Link
-                </label>
-                <div className='flex items-center gap-2'>
-                  <div className='flex-1 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-3'>
-                    <input
-                      type='text'
-                      value={generateOnboardingLink()}
-                      readOnly
-                      className='w-full bg-transparent text-sm text-gray-900 dark:text-white outline-none'
-                    />
-                  </div>
-                  <Button
-                    variant='primary'
-                    onClick={copyOnboardingLink}
-                    className='px-4 py-3'
-                    disabled={copied}
-                  >
-                    {copied ? (
-                      <span className='flex items-center gap-2'>
-                        <span className='text-green-500'>✓</span>
-                        Copied!
-                      </span>
-                    ) : (
-                      <span className='flex items-center gap-2'>
-                        <Copy size={16} />
-                        Copy
-                      </span>
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              {/* Instructions */}
-              <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4'>
-                <h5 className='text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2'>
-                  How it works:
-                </h5>
-                <ul className='text-sm text-blue-800 dark:text-blue-200 space-y-1'>
-                  <li>
-                    • Share this link with your customers via email, SMS, or any
-                    communication channel
-                  </li>
-                  <li>
-                    • When customers click the link, they'll be taken to the
-                    signup page
-                  </li>
-                  <li>
-                    • They'll automatically be associated with your business
-                  </li>
-                  <li>
-                    • You'll see them appear in your customers list once they
-                    complete registration
-                  </li>
-                </ul>
               </div>
             </div>
           </div>

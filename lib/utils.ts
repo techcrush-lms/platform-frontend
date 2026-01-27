@@ -1089,3 +1089,7 @@ export const listFromNumber = (num: number) => {
 };
 
 export const brandPreffix = 'TC';
+
+export const isTutor = (role: string | SystemRole) => {
+  return [SystemRole.TUTOR].includes(role as SystemRole);
+};

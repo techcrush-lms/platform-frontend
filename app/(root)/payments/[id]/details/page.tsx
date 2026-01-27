@@ -49,7 +49,7 @@ const ViewPayment = () => {
           id: payment?.id!,
           tier_id,
           business_id: org?.id!,
-        })
+        }),
       ).unwrap();
 
       toast.success(response.message);
@@ -71,18 +71,6 @@ const ViewPayment = () => {
           layer3='Details'
           layer2Link='/payments'
           enableBackButton={true}
-          ctaButtons={
-            <div className='flex-shrink-0 self-start'>
-              <Button
-                variant='primary'
-                className='text-md bg-primary gap-1 py-2 rounded-lg flex items-center px-3'
-                onClick={() => setChatOpen(!chatOpen)}
-              >
-                <IoIosChatboxes className='text-lg' />
-                {chatOpen ? 'Close Chat' : 'Chat'}
-              </Button>
-            </div>
-          }
         />
 
         {!payment ? (
@@ -103,7 +91,7 @@ const ViewPayment = () => {
                     'p-1 rounded text-xs font-medium',
                     payment?.payment_status === PaymentStatus.SUCCESS
                       ? 'bg-green-100 text-green-800'
-                      : 'bg-yellow-100 text-yellow-800'
+                      : 'bg-yellow-100 text-yellow-800',
                   )}
                 >
                   {payment?.payment_status}
@@ -114,9 +102,7 @@ const ViewPayment = () => {
                 <strong>Date:</strong>{' '}
                 {moment(payment?.created_at).format('LLL')}
               </div>
-              <div>
-                <strong>Type:</strong> {payment?.purchase_type}
-              </div>
+
               <div>
                 <strong>Method:</strong> {payment?.payment_method}
               </div>
@@ -144,7 +130,7 @@ const ViewPayment = () => {
                   <img
                     src={getAvatar(
                       payment.user?.profile?.profile_picture!,
-                      payment.user?.name!
+                      payment.user?.name!,
                     )}
                     alt={payment.user.name}
                     className='w-20 h-20 rounded-full object-cover'

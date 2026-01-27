@@ -1,5 +1,6 @@
 import { Gender } from '@/lib/utils';
 import { BusinessContactDetails } from './notification';
+import { CourseTutor } from './org';
 
 // Business Interface
 export interface Business {
@@ -65,6 +66,7 @@ export interface Profile {
   };
   accessible_businesses?: AccessibleBusiness[];
   business_contacts?: BusinessContactDetails[];
+  courses_tutoring?: CourseTutor[];
 }
 
 export interface UserProfile {

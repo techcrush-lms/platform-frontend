@@ -25,7 +25,7 @@ const VerifySigninContent = () => {
   const router = useRouter();
 
   const { emailData, setEmailData } = useTokenDecrypt<LoginProps>(
-    params.get('token')!
+    params.get('token')!,
   );
 
   if (!emailData) {
@@ -64,7 +64,7 @@ const VerifySigninContent = () => {
 const LogoSection = () => (
   <div className='flex items-center justify-center mb-6 sm:mb-8'>
     <Image
-      src='/icons/icon.png'
+      src='/logo.png'
       width={100}
       height={60}
       alt='Company Logo'

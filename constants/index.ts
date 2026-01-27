@@ -1,33 +1,17 @@
-import { SignupRole, SystemRole } from '@/lib/utils';
+import { SystemRole } from '@/lib/utils';
 import {
   HiBell,
-  HiBookOpen,
-  HiChartPie,
   HiCollection,
   HiHome,
-  HiLogout,
-  HiOutlineQuestionMarkCircle,
-  HiOutlineUpload,
-  HiQuestionMarkCircle,
   HiShoppingCart,
-  HiUpload,
   HiUserGroup,
   HiUsers,
-  HiViewBoards,
 } from 'react-icons/hi';
 import {
-  IoIosAdd,
   IoIosAnalytics,
-  IoIosBook,
-  IoIosBriefcase,
   IoIosCog,
   IoIosContacts,
-  IoIosFilm,
-  IoIosHelp,
-  IoIosPower,
   IoIosPricetag,
-  IoIosWallet,
-  IoMdChatboxes,
 } from 'react-icons/io';
 
 export enum groups {
@@ -41,7 +25,11 @@ export const sidebarLinks = [
     route: '/home',
     label: 'Overview',
     group: groups.ONE,
-    roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
+    roleOptions: [
+      SystemRole.BUSINESS_SUPER_ADMIN,
+      SystemRole.BUSINESS_ADMIN,
+      SystemRole.TUTOR,
+    ],
     activeIconColor: 'text-primary-main', // Add this
   },
   {
@@ -78,13 +66,24 @@ export const sidebarLinks = [
       },
     ],
   },
-
+  {
+    icon: IoIosPricetag,
+    route: '/assigned-courses',
+    label: 'Courses',
+    group: groups.ONE,
+    roleOptions: [SystemRole.TUTOR],
+    activeIconColor: 'text-primary-main', // Add this
+  },
   {
     icon: HiCollection,
     route: '/assessments',
     label: 'Assessments',
     group: groups.ONE,
-    roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
+    roleOptions: [
+      SystemRole.BUSINESS_SUPER_ADMIN,
+      SystemRole.BUSINESS_ADMIN,
+      SystemRole.TUTOR,
+    ],
     activeIconColor: 'text-primary-main', // Add this
     items: [
       {
@@ -96,14 +95,6 @@ export const sidebarLinks = [
         label: 'Exams',
       },
     ],
-  },
-  {
-    icon: HiShoppingCart,
-    route: '/dashboard/cart',
-    label: 'Cart',
-    group: groups.ONE,
-    roleOptions: [SystemRole.USER],
-    activeIconColor: 'text-primary-main', // Add this
   },
   {
     icon: HiUserGroup,
@@ -141,6 +132,10 @@ export const sidebarLinks = [
     ],
     items: [
       {
+        route: '/notifications/in-app',
+        label: 'Internal',
+      },
+      {
         route: '/notifications/email',
         label: 'Email',
       },
@@ -167,7 +162,11 @@ export const sidebarLinks = [
     route: '/settings',
     label: 'Settings',
     group: groups.TWO,
-    roleOptions: [SystemRole.BUSINESS_SUPER_ADMIN, SystemRole.BUSINESS_ADMIN],
+    roleOptions: [
+      SystemRole.BUSINESS_SUPER_ADMIN,
+      SystemRole.BUSINESS_ADMIN,
+      SystemRole.TUTOR,
+    ],
     activeIconColor: 'text-primary-main', // Add this
   },
   {

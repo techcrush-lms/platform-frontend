@@ -97,18 +97,17 @@ const SetPassword = () => {
         <title>Set Password</title>
       </Head>
 
-      <div className='w-full max-w-2xl border-2 border-white rounded-2xl bg-primary-light p-4 sm:p-8 md:p-10 my-4 sm:my-8 md:my-12'>
+      <div className='w-full max-w-2xl rounded-2xl bg-primary-light p-4 sm:p-8 md:p-10 my-4 sm:my-8 md:my-12'>
         <div className='w-full rounded-2xl p-6 sm:p-8 bg-white flex flex-col items-center justify-center'>
           <Link
             href='/'
             className='flex items-center justify-center mb-6 sm:mb-8'
           >
             <Image
-              src={'/icons/icon.png'}
-              width={60}
+              src={'/logo.png'}
+              width={100}
               height={60}
-              alt='Logo icon'
-              className='rounded-lg'
+              alt='Logo'
               priority
             />
           </Link>

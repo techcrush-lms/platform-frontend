@@ -13,7 +13,7 @@ const ChangePasswordContent = () => {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
 
   const { userDetails, setUserDetails, token } = useVerifyToken(
-    params.get('token')!
+    params.get('token')!,
   );
 
   const handleRoleSelect = (role: string) => {
@@ -31,10 +31,10 @@ const ChangePasswordContent = () => {
       <div className='w-full rounded-2xl p-6 sm:p-8 bg-white flex flex-col items-center justify-center'>
         <div className='flex items-center justify-center mb-6 sm:mb-8'>
           <Image
-            src={'/icons/icon.png'}
+            src={'/logo.png'}
             width={60}
             height={60}
-            alt='Logo icon'
+            alt='Logo'
             className='rounded-lg'
             priority
           />

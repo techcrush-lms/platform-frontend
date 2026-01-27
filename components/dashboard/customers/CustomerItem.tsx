@@ -43,20 +43,20 @@ const CustomerItem = ({ customer }: CustomerItemProps) => {
           className='px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white font-bold relative group'
         >
           <Link
-            href={`/customers/${customer.id}`}
-            className='hover:text-primary-400 p-0 underline underline-offset-4 flex items-center gap-1'
+            href={`/students/${customer.id}`}
+            className='hover:text-red-400 p-0 underline underline-offset-4 flex items-center gap-1'
             title={customer.id}
           >
             {shortenId(customer.id)} <PencilIcon size='13' />
           </Link>
         </td>
         <td className='px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white font-bold'>
-          <p className={cn('flex items-center gap-1 hover:text-primary-400')}>
+          <p className={cn('flex items-center gap-1 hover:text-red-400')}>
             {(customer?.profile?.profile_picture! || customer.name) && (
               <img
                 src={getAvatar(
                   customer?.profile?.profile_picture!,
-                  customer.name
+                  customer.name,
                 )}
                 alt={customer.name}
                 className='w-8 h-8 rounded-full object-cover'

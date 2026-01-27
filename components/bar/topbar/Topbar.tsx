@@ -7,12 +7,10 @@ import MobileNav from '../sidebar/MobileNav';
 import RecentNotifications from './RecentNotifications';
 import Icon from '@/components/ui/Icon';
 import useCart from '@/hooks/page/useCart';
-import { ShoppingCart, Store, Globe } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { SystemRole, baseUrl, isBusiness } from '@/lib/utils';
-import { StoreLink } from '@/components/StoreLink';
-import CurrencySwitcher from '@/components/dashboard/CurrencySwitcher';
+import { SystemRole, baseUrl } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
 const Topbar = () => {
@@ -26,7 +24,7 @@ const Topbar = () => {
       window.open(
         `${baseUrl}/b/${org.business_slug}`,
         '_blank',
-        'noopener,noreferrer'
+        'noopener,noreferrer',
       );
       toast.success('Opened in new tab!');
     }

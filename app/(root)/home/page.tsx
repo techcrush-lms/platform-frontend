@@ -3,50 +3,37 @@
 import { ClientRequestsTable } from '@/components/dashboard/ClientRequestsTable';
 import { LineChart } from '@/components/dashboard/LineChart';
 import { RecentTransactions } from '@/components/dashboard/RecentTransactions';
-import { Button } from '@/components/ui/Button';
-import Icon from '@/components/ui/Icon';
-import {
-  areAllOnboardingStepsPresent,
-  getInviteRole,
-  PurchaseItemType,
-  SystemRole,
-} from '@/lib/utils';
+
+import { getInviteRole, PurchaseItemType, SystemRole } from '@/lib/utils';
 import { RootState } from '@/redux/store';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import OnboardingModal from '@/components/dashboard/OnboardingModal';
-import SelectOrgModal from '@/components/dashboard/SelectOrgModal';
 import { useRouter } from 'next/navigation';
 import {
   getStats,
   getMonthlyProductRevenue,
 } from '@/redux/slices/analyticsSlice';
 import { AppDispatch } from '@/redux/store';
-import { ErrorResponse } from '@/types';
-import { OnboardingSteps } from '@/components/OnboardingSteps';
 import StatsGrid from '@/components/dashboard/StatsGrid';
-import { MonthlyRevenueData, MonthlyRevenueResponse } from '@/types/analytics';
+import { MonthlyRevenueData } from '@/types/analytics';
 import usePayments from '@/hooks/page/usePayments';
 import { switchToOrg } from '@/redux/slices/orgSlice';
+import useOrgs from '@/hooks/page/useOrgs';
+import TeamMemberAssignedCourseDetails from '@/components/dashboard/team/TeamMemberAssignedCourseDetails';
 
 const Home = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { profile } = useSelector((state: RootState) => state.auth);
-  const { orgs, org } = useSelector((state: RootState) => state.org);
+  const { orgs } = useOrgs();
+  const { org } = useSelector((state: RootState) => state.org);
   const analytics = useSelector((state: RootState) => state.analytics);
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [showOrgModal, setShowOrgModal] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('NGN');
-  const { payments, loading } = usePayments({ limit: 4 });
+  const { payments } = usePayments({ limit: 4 });
 
   const handleCurrencyChange = (currency: string) => {
     setSelectedCurrency(currency);
-  };
-
-  const navigateToBusinessPage = () => {
-    router.push('/settings?tab=business-account');
   };
 
   const handleSelectOrg = (orgId: string) => {
@@ -73,7 +60,8 @@ const Home = () => {
       router.replace('/dashboard/home');
     } else if (
       profile?.role?.role_id === SystemRole.BUSINESS_ADMIN ||
-      profile?.role?.role_id === SystemRole.BUSINESS_SUPER_ADMIN
+      profile?.role?.role_id === SystemRole.BUSINESS_SUPER_ADMIN ||
+      profile?.role?.role_id === SystemRole.TUTOR
     ) {
       router.replace('/home');
     }
@@ -297,61 +285,86 @@ const Home = () => {
           </div> */}
           <StatsGrid />
 
-          <div className='py-6 space-y-6'>
-            <div className='grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6'>
-              <div className='col-span-1 xl:col-span-2 bg-white border border-gray-200 dark:bg-gray-800 dark:border-0 p-4 rounded-md'>
-                <div className='flex justify-between items-center'>
-                  <h3 className='font-semibold'>Performance</h3>
-                  <div className='flex items-center'>
-                    <select
-                      id='currency-select'
-                      value={selectedCurrency}
-                      onChange={(e) => handleCurrencyChange(e.target.value)}
-                      className='appearance-none text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md px-3 py-1.5 pr-6 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 transition'
-                      style={{
-                        backgroundImage:
-                          "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='gray'%3E%3Cpath strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E\")",
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'right 0.5rem center',
-                        backgroundSize: '1rem',
-                      }}
-                    >
-                      {analytics.monthlyRevenue?.currencies.map((item) => (
-                        <option
-                          key={item.currency}
-                          value={item.currency}
-                          className='text-gray-700 dark:text-gray-200'
-                        >
-                          {item.currency}
-                        </option>
-                      ))}
-                    </select>
+          {profile?.role.role_id !== SystemRole.TUTOR && (
+            <div className='py-6 space-y-6'>
+              <div className='grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6'>
+                <div className='col-span-1 xl:col-span-2 bg-white border border-gray-200 dark:bg-gray-800 dark:border-0 p-4 rounded-md'>
+                  <div className='flex justify-between items-center'>
+                    <h3 className='font-semibold'>Performance</h3>
+                    <div className='flex items-center'>
+                      <select
+                        id='currency-select'
+                        value={selectedCurrency}
+                        onChange={(e) => handleCurrencyChange(e.target.value)}
+                        className='appearance-none text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md px-3 py-1.5 pr-6 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 transition'
+                        style={{
+                          backgroundImage:
+                            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='gray'%3E%3Cpath strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E\")",
+                          backgroundRepeat: 'no-repeat',
+                          backgroundPosition: 'right 0.5rem center',
+                          backgroundSize: '1rem',
+                        }}
+                      >
+                        {analytics.monthlyRevenue?.currencies.map((item) => (
+                          <option
+                            key={item.currency}
+                            value={item.currency}
+                            className='text-gray-700 dark:text-gray-200'
+                          >
+                            {item.currency}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
+                  {performanceHtml}
                 </div>
-                {performanceHtml}
-              </div>
-              <div className='bg-white dark:bg-gray-800 p-4 rounded-md border border-gray-200 dark:border-0'>
-                <div className='flex justify-between items-center mb-4'>
-                  <h3 className='font-semibold '>Recent Transactions</h3>
-                  <Link href={'/payments'}>View all</Link>
+                <div className='bg-white dark:bg-gray-800 p-4 rounded-md border border-gray-200 dark:border-0'>
+                  <div className='flex justify-between items-center mb-4'>
+                    <h3 className='font-semibold '>Recent Transactions</h3>
+                    <Link href={'/payments'}>View all</Link>
+                  </div>
+                  <RecentTransactions payments={payments} />
                 </div>
-                <RecentTransactions payments={payments} />
               </div>
-            </div>
 
-            <div className='hidden grid-cols-1  gap-6'>
-              {/* Client Requests */}
-              <div className='lg:col-span-2'>
-                <div className='flex justify-between items-center mb-3'>
-                  <h2 className='text-lg font-semibold'>Client Requests</h2>
-                  <Link href='' className='text-primary-main dark:text-white'>
-                    View All
-                  </Link>
+              <div className='hidden grid-cols-1  gap-6'>
+                {/* Client Requests */}
+                <div className='lg:col-span-2'>
+                  <div className='flex justify-between items-center mb-3'>
+                    <h2 className='text-lg font-semibold'>Client Requests</h2>
+                    <Link href='' className='text-primary-main dark:text-white'>
+                      View All
+                    </Link>
+                  </div>
+                  <ClientRequestsTable requests={clientRequests} />
                 </div>
-                <ClientRequestsTable requests={clientRequests} />
               </div>
             </div>
-          </div>
+          )}
+
+          {/* Course Tutoring Card */}
+          {profile?.role.role_id === SystemRole.TUTOR && (
+            <div className='mt-4 w-full mx-auto bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6'>
+              <h3 className='text-lg font-semibold text-gray-800 dark:text-gray-100'>
+                Assigned Courses
+              </h3>
+
+              {profile.courses_tutoring?.length ? (
+                <div className='space-y-4'>
+                  {profile.courses_tutoring.map((course_tutoring) => (
+                    <TeamMemberAssignedCourseDetails
+                      course_tutoring={course_tutoring}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className='text-sm text-gray-500 dark:text-gray-400'>
+                  This tutor is not assigned to any courses yet.
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </main>

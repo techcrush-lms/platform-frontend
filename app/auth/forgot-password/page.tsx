@@ -20,10 +20,10 @@ const ForgotPassword = () => {
             className='flex items-center justify-center mb-6 sm:mb-8'
           >
             <Image
-              src={'/icons/icon.png'}
+              src={'/logo.png'}
               width={100}
               height={60}
-              alt='Logo icon'
+              alt='Logo'
               priority
             />
           </Link>

@@ -285,7 +285,7 @@ const Home = () => {
           </div> */}
           <StatsGrid />
 
-          {profile?.role.role_id !== SystemRole.TUTOR && (
+          {profile?.role?.role_id !== SystemRole.TUTOR && (
             <div className='py-6 space-y-6'>
               <div className='grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6'>
                 <div className='col-span-1 xl:col-span-2 bg-white border border-gray-200 dark:bg-gray-800 dark:border-0 p-4 rounded-md'>
@@ -344,7 +344,7 @@ const Home = () => {
           )}
 
           {/* Course Tutoring Card */}
-          {profile?.role.role_id === SystemRole.TUTOR && (
+          {profile?.role?.role_id === SystemRole.TUTOR && (
             <div className='mt-4 w-full mx-auto bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6'>
               <h3 className='text-lg font-semibold text-gray-800 dark:text-gray-100'>
                 Assigned Courses

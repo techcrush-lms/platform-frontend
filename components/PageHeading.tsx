@@ -56,7 +56,7 @@ const PageHeading = ({
       <div
         className={cn(
           '',
-          enableBreadCrumbStyle && 'dark:bg-black-1 pt-2 pb-6 px-4 rounded-lg'
+          enableBreadCrumbStyle && 'dark:bg-black-1 pt-2 pb-6 px-4 rounded-lg',
         )}
       >
         {enableBreadCrumb && (
@@ -66,7 +66,7 @@ const PageHeading = ({
                 <li className='inline-flex items-center'>
                   <Link
                     href={
-                      profile?.role.role_id === SystemRole.USER
+                      profile?.role?.role_id === SystemRole.USER
                         ? '/dashboard/home'
                         : '/home'
                     }

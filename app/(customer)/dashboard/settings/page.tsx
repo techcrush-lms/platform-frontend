@@ -82,16 +82,7 @@ const Settings = () => {
               <TabsContent value='general'>
                 <GeneralSettings />
               </TabsContent>
-              {profile?.role.role_id === SystemRole.BUSINESS_SUPER_ADMIN && (
-                <>
-                  <TabsContent value='business-account'>
-                    <BusinessAccountSettings />
-                  </TabsContent>
-                  <TabsContent value='bank-account'>
-                    <BankAccountSettings />
-                  </TabsContent>
-                </>
-              )}
+
               <TabsContent value='security'>
                 <SecuritySettings />
               </TabsContent>

@@ -51,7 +51,7 @@ export default function StatsGrid() {
         ) : analytics?.stats ? (
           <>
             {/* 💰 Total Revenue Card */}
-            {[
+            {/* {[
               SystemRole.BUSINESS_SUPER_ADMIN,
               SystemRole.BUSINESS_ADMIN,
             ].includes(profile?.role.role_id as SystemRole) && (
@@ -118,7 +118,7 @@ export default function StatsGrid() {
                   </p>
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* 📊 Stat Cards */}
             {[

@@ -6,13 +6,11 @@ import { FiShield, FiSettings, FiBriefcase } from 'react-icons/fi';
 import GeneralSettings from '@/components/settings/GeneralSettings';
 import SecuritySettings from '@/components/settings/SecuritySettings';
 import { IoIosBusiness } from 'react-icons/io';
-import BankAccountSettings from '@/components/settings/BankAccountSettings';
 import { RootState } from '@/redux/store';
 import { useSelector } from 'react-redux';
 import { SystemRole } from '@/lib/utils';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import BusinessAccountSettings from '@/components/settings/BusinessAccountSettings';
 
 const Settings = () => {
   const { profile } = useSelector((state: RootState) => state.auth);
